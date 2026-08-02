@@ -182,3 +182,13 @@
     border-right-color: var(--border);
   }
 }
+
+.active{
+  background-color: aqua;
+}
+
+.list-group-item{
+
+  left:0
+
+}
