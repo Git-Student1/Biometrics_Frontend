@@ -5,15 +5,12 @@ import {
     useState,
 } from "react";
 
-type Props = {
-    preparation: () => Promise<void>;
-};
 
-import { getCameraStreamUrl } from "../api/modelApi"
+import { getCameraStreamUrl, doIdentification, doVerification } from "../api/modelApi"
+import type { VerIdentResponse } from "../api/modelApi";
 
-export function CameraInteraction({
-                                      preparation,
-                                  }: Props) {
+export function CameraInteraction() {
+
     const [message, setMessage] = useState("");
     const [isProcessing, setIsProcessing] = useState(false);
     const [isPrepared, setIsPrepared] = useState(false);
@@ -23,10 +20,20 @@ export function CameraInteraction({
     const handleKey = useCallback(async (key: string) => {
         setIsProcessing(true);
         setMessage("");
-
+        console.log(`Button ${key} pressed`)
         try {
-            const result = await pressCameraKey(key);
-            setMessage(`Executed: ${result.key}`);
+            let result: string;
+            let details: string;
+
+            if(key === "v"){
+                ({ result, details } = await doVerification());
+            }
+            else if (key === "i"){
+                ({ result, details } = await doIdentification());
+            }
+
+            setMessage(`result: ${result} \n details: ${details}`);
+            console.log(`Button ${key} pressed`)
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 const detail = error.response?.data?.detail;
@@ -44,95 +51,6 @@ export function CameraInteraction({
         }
     }, []);
 
-    useEffect(() => {
-        let cancelled = false;
-
-        async function prepareCamera() {
-            setIsPrepared(false);
-            setPreparationError(null);
-
-            try {
-                await preparation();
-
-                if (!cancelled) {
-                    setIsPrepared(true);
-                }
-            } catch (error) {
-                if (cancelled) {
-                    return;
-                }
-
-                if (axios.isAxiosError(error)) {
-                    const detail = error.response?.data?.detail;
-
-                    setPreparationError(
-                        typeof detail === "string"
-                            ? detail
-                            : error.message,
-                    );
-                } else {
-                    setPreparationError(
-                        "Camera preparation failed",
-                    );
-                }
-            }
-        }
-
-        void prepareCamera();
-
-        return () => {
-            cancelled = true;
-        };
-    }, [preparation]);
-
-    useEffect(() => {
-        if (!isPrepared) {
-            return;
-        }
-
-        function handleKeyDown(event: KeyboardEvent) {
-            const target = event.target as HTMLElement;
-            const key = event.key.toLowerCase();
-
-            if (
-                target.tagName === "INPUT" ||
-                target.tagName === "TEXTAREA" ||
-                target.tagName === "SELECT"
-            ) {
-                return;
-            }
-
-            if (key === "i" || key === "v" || key === "q") {
-                void handleKey(key);
-            }
-        }
-
-        window.addEventListener("keydown", handleKeyDown);
-
-        return () => {
-            window.removeEventListener(
-                "keydown",
-                handleKeyDown,
-            );
-        };
-    }, [handleKey, isPrepared]);
-
-    if (preparationError) {
-        return (
-            <section>
-                <p>{preparationError}</p>
-            </section>
-        );
-    }
-
-    if (!isPrepared) {
-        return (
-            <section>
-                <p>Preparing camera...</p>
-            </section>
-        );
-    }
-
     return (
         <section>
             <img
@@ -144,6 +62,17 @@ export function CameraInteraction({
                     display: "block",
                     objectFit: "cover",
                     marginBottom: 16,
+                }}
+                onLoad={() => {
+                    console.log("Camera stream loaded");
+                }}
+                onError={(event) => {
+                    console.error(
+                        "Camera stream failed:",
+                        getCameraStreamUrl(),
+                        event,
+                    );
+                    setMessage("Camera stream could not be loaded");
                 }}
             />
 

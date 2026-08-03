@@ -38,29 +38,29 @@ export async function selectModel(model:str){
     return response.data.success
 }
 
-export type CameraKeyResponse = {
-    status: string;
-    key: string;
+export type VerIdentResponse = {
+    result:string
+    details:string
 };
 
-export async function pressCameraKey(
-    key: string,
-): Promise<CameraKeyResponse> {
-    const response = await backendApi.post<CameraKeyResponse>(
-        "/camera/key",
-        { key },
+export async function doIdentification(
+): Promise<VerIdentResponse>{
+    const response = await backendApi.get<CameraKeyResponse>(
+        "/camera/identify",
     );
-
     return response.data;
 }
 
-export async function doVerIdent(): Promise{
-    const response = await backendApi.post(
-        "/camera/doVerIdent"
+export async function doVerification(
+): Promise<VerIdentResponse> {
+    const response = await backendApi.get<CameraKeyResponse>(
+        "/camera/verify",
     );
 
-    return response.data;
+    return response.data.result, response.data.details;
 }
+
+
 
 export function getCameraStreamUrl(): string {
     return `${backendApi.defaults.baseURL}/camera/stream`;
