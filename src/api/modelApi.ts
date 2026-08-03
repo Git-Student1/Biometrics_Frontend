@@ -45,25 +45,39 @@ export type VerIdentResponse = {
 
 export async function doIdentification(
 ): Promise<VerIdentResponse>{
-    const response = await backendApi.get<CameraKeyResponse>(
+    const response = await backendApi.post<CameraKeyResponse>(
         "/camera/identify",
     );
     return response.data;
 }
 
-export async function doVerification(
+export async function doVerification(person:string
 ): Promise<VerIdentResponse> {
-    const response = await backendApi.get<CameraKeyResponse>(
+    const response = await backendApi.post<CameraKeyResponse>(
         "/camera/verify",
-    );
+         {
+            person:person
+         }
 
-    return response.data.result, response.data.details;
+    );
+    return response.data;
 }
 
 
 
 export function getCameraStreamUrl(): string {
     return `${backendApi.defaults.baseURL}/camera/stream`;
+}
+
+export type PeopleForVerify = {
+    people:string[]
+}
+
+export async function fetchPeopleForVerification(){
+    const response = await backendApi.get<PeopleForVerify>(
+        "/peopleForVerification"
+    );
+    return response.data
 }
 
 

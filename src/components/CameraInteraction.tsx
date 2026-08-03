@@ -6,50 +6,62 @@ import {
 } from "react";
 
 
-import { getCameraStreamUrl, doIdentification, doVerification } from "../api/modelApi"
+import { getCameraStreamUrl, doIdentification, doVerification, fetchPeopleForVerification } from "../api/modelApi"
 import type { VerIdentResponse } from "../api/modelApi";
 
 export function CameraInteraction() {
 
     const [message, setMessage] = useState("");
     const [isProcessing, setIsProcessing] = useState(false);
-    const [isPrepared, setIsPrepared] = useState(false);
-    const [preparationError, setPreparationError] =
-        useState<string | null>(null);
 
-    const handleKey = useCallback(async (key: string) => {
+    const [selectedPersonId, setSelectedPersonId] = useState("");
+    const [showPersonSelection, setShowPersonSelection] = useState(false);
+
+    const [people, setPeople] = useState<string[]>([])
+
+
+    const runIdentification = useCallback(async () => {
         setIsProcessing(true);
         setMessage("");
-        console.log(`Button ${key} pressed`)
+
         try {
-            let result: string;
-            let details: string;
-
-            if(key === "v"){
-                ({ result, details } = await doVerification());
-            }
-            else if (key === "i"){
-                ({ result, details } = await doIdentification());
-            }
-
+            const { result, details } = await doIdentification();
             setMessage(`result: ${result} \n details: ${details}`);
-            console.log(`Button ${key} pressed`)
         } catch (error) {
-            if (axios.isAxiosError(error)) {
-                const detail = error.response?.data?.detail;
-
-                setMessage(
-                    typeof detail === "string"
-                        ? detail
-                        : error.message,
-                );
-            } else {
-                setMessage("Camera action failed");
-            }
+            setMessage(getErrorMessage(error));
         } finally {
             setIsProcessing(false);
         }
     }, []);
+
+    const startVerification = useCallback(async () => {
+        const {people} = await fetchPeopleForVerification()
+        setPeople(people)
+
+        setMessage("")
+        setShowPersonSelection(true);
+        }
+
+    )
+
+    const confirmVerification = useCallback( async  () => {
+        if (!selectedPersonId) {
+            setMessage("Select a person first.");
+            return;
+        }
+        setIsProcessing(true);
+        setMessage("");
+        try {
+            const response = await doVerification(selectedPersonId);
+            setMessage(`Result: ${response.result}`);
+            setShowPersonSelection(false);
+        } catch (error) {
+            setMessage(getErrorMessage(error));
+        } finally {
+            setIsProcessing(false);
+        }
+    }, [selectedPersonId]);
+
 
     return (
         <section>
@@ -80,7 +92,7 @@ export function CameraInteraction() {
                 <button
                     type="button"
                     disabled={isProcessing}
-                    onClick={() => void handleKey("i")}
+                    onClick={runIdentification}
                 >
                     Identification
                 </button>
@@ -88,19 +100,58 @@ export function CameraInteraction() {
                 <button
                     type="button"
                     disabled={isProcessing}
-                    onClick={() => void handleKey("v")}
+                    onClick={startVerification}
                 >
                     Verification
                 </button>
 
-                <button
-                    type="button"
-                    disabled={isProcessing}
-                    onClick={() => void handleKey("q")}
-                >
-                    Close
-                </button>
             </div>
+
+            {showPersonSelection && (
+                <div style={{ marginTop: 16 }}>
+                    <label htmlFor="verification-person">
+                        Person to verify
+                    </label>
+
+                    <select
+                        id="verification-person"
+                        value={selectedPersonId}
+                        disabled={isProcessing}
+                        onChange={(event) =>
+                            setSelectedPersonId(event.target.value)
+                        }
+                    >
+                        <option value="">Select a person</option>
+                        {
+
+                        }
+                        {people.map((person) => (
+                            <option key={person}>
+                                {person}
+                            </option>
+                        ))}
+                    </select>
+
+                    <button
+                        type="button"
+                        disabled={isProcessing || !selectedPersonId}
+                        onClick={() => void confirmVerification()}
+                    >
+                        Verify selected person
+                    </button>
+
+                    <button
+                        type="button"
+                        disabled={isProcessing}
+                        onClick={() => {
+                            setShowPersonSelection(false);
+                            setSelectedPersonId("");
+                        }}
+                    >
+                        Cancel
+                    </button>
+                </div>
+            )}
 
             {message && <p>{message}</p>}
         </section>

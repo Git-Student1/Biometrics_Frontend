@@ -10,7 +10,6 @@ function App() {
     return (
         <>
             <ModelList />
-            <div>Hello</div>
             <VerIdent/>
         </>
 )

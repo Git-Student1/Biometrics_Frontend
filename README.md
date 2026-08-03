@@ -33,3 +33,20 @@ See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rule
 
 
 npm run dev
+
+
+
+# Next TODOs:
+1. add verification (+ person selection)
+1. add taking anchor/positive images (combine if possible + start stop instead of button pressing)
+1. add model training via frontend 
+
+
+
+
+# Feature Ideas
+- with identification show image of identified personw ith highest match rate   
+- for verification show "Kacheln" with name and an image 
+- collapsable model selection
+- when doing identification or verification freeze the image (show image in backend)
+- anchor/pos images: show number of taken and total number
