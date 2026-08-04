@@ -3,7 +3,7 @@ import { useState } from "react"
 interface Props{
     title:string,
     items:string[],
-    handleClick:(item:str) => void
+    handleClick:(item:string) => void
 
 }
 

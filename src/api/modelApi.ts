@@ -28,7 +28,7 @@ interface ModelLoadingResponse{
     success:boolean
 }
 
-export async function selectModel(model:str){
+export async function selectModel(model:string){
     const response = await backendApi.post<ModelLoadingResponse>(
         "/selectModel",
         {
@@ -45,7 +45,7 @@ export type VerIdentResponse = {
 
 export async function doIdentification(
 ): Promise<VerIdentResponse>{
-    const response = await backendApi.post<CameraKeyResponse>(
+    const response = await backendApi.post<VerIdentResponse>(
         "/camera/identify",
     );
     return response.data;
@@ -53,7 +53,7 @@ export async function doIdentification(
 
 export async function doVerification(person:string
 ): Promise<VerIdentResponse> {
-    const response = await backendApi.post<CameraKeyResponse>(
+    const response = await backendApi.post<VerIdentResponse>(
         "/camera/verify",
          {
             person:person

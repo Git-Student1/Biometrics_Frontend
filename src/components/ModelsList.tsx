@@ -6,7 +6,7 @@ import { selectModel } from "../api/modelApi"
 
 export default function ModelsList() {
     const { models, isLoading, error } = useModels();
-    const handleModelSelection = (model:str) => {
+    const handleModelSelection = (model:string) => {
         try {
             selectModel(model).then(
                 //popup that it was loaded
