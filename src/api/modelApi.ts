@@ -69,6 +69,16 @@ export function getCameraStreamUrl(): string {
     return `${backendApi.defaults.baseURL}/camera/stream`;
 }
 
+export type CameraStatusResponse = {
+    active:boolean
+    error:string
+};
+
+export async function getCameraStatus() {
+    const response = await backendApi.get<CameraStatusResponse>("/camera/status")
+    return response.data;
+}
+
 export type PeopleForVerify = {
     people:string[]
 }

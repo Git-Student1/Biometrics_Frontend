@@ -1,7 +1,8 @@
-import type { ReactNode} from "react";
+import {type ReactNode, useEffect, useState} from "react";
 
 
-import { getCameraStreamUrl } from "../api/modelApi"
+import {getCameraStatus, getCameraStreamUrl} from "../api/modelApi"
+import axios from "axios";
 
 
 type Props  = {
@@ -10,11 +11,43 @@ type Props  = {
     setMessage:  React.Dispatch<React.SetStateAction<string>>;
 }
 
+
+
 export function CameraInteraction({children, message, setMessage}:Props) {
+
+    const [streamReady, setStreamReady] = useState(false);
+
+    useEffect(() => {
+        async function checkCamera() {
+            try {
+                const status = await getCameraStatus();
+
+                if (!status.active) {
+                    setMessage(
+                        status.error ?? "Server failed to access the camera.",
+                    );
+                    return;
+                }
+
+                setStreamReady(true);
+            } catch (error) {
+                if (axios.isAxiosError(error)) {
+                    setMessage(
+                        error.response?.data?.detail ??
+                        error.message,
+                    );
+                } else {
+                    setMessage("Could not check camera status.");
+                }
+            }
+        }
+
+        void checkCamera();
+    }, [setMessage]);
 
     return (
         <section>
-            <img
+            {(streamReady && <img
                 src={getCameraStreamUrl()}
                 alt="Live camera"
                 width={250}
@@ -28,16 +61,21 @@ export function CameraInteraction({children, message, setMessage}:Props) {
                     console.log("Camera stream loaded");
                 }}
                 onError={(event) => {
+                    setStreamReady(false);
+                    setMessage("The camera stream stopped unexpectedly.");
                     console.error(
-                        "Camera stream failed:",
+                        `Camera stream failed:`,
                         getCameraStreamUrl(),
                         event,
                     );
                     setMessage("Camera stream could not be loaded");
                 }}
-            />
-            {children}
+                />)}
+
+            { streamReady && children}
+
             {message && <p>{message}</p>}
+
         </section>
     );
 }

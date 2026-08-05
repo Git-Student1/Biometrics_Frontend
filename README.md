@@ -45,8 +45,8 @@ npm run dev
 
 
 # Feature Ideas
-- with identification show image of identified personw ith highest match rate   
-- for verification show "Kacheln" with name and an image 
+- for verificationa and identification show the people that are there and the amount of images each have as "Kacheln" or List
+- with identification show image of identified person ith highest match rate   
 - collapsable model selection
 - when doing identification or verification freeze the image (show image in backend)
 - anchor/pos images: show number of taken and total number
