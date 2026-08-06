@@ -94,8 +94,19 @@ export function getNumberStreamUrl(person: string): string {
     return `${backendApi.defaults.baseURL}/camera/numberPositives/${encodeURIComponent(person)}`;
 }
 
-export function getCameraStatusStream(): string {
-    return `${backendApi.defaults.baseURL}/camera/statusstream/`;
+export function getCameraRecordingStatusStream(): string {
+    return `${backendApi.defaults.baseURL}/camera/recordingstatusStream/`;
+}
+
+export type RecordingStatus = {
+    recording:boolean
+}
+
+export async function getCameraRecordingStatus(): Promise<RecordingStatus> {
+    const response = await backendApi.get<RecordingStatus>(
+        "/camera/recordingstatus/"
+    );
+    return response.data;
 }
 
 
