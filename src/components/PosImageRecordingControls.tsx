@@ -1,17 +1,21 @@
 import {
-    getCameraRecordingStatus,
-    getNumberStreamUrl,
-    startRecording,
+    getCameraRecordingStatus, getNumberAncStreamUrl,
+    getNumberPosStreamUrl,
+    startRecordingAnc,
+    startRecordingPos,
     stopRecording
 } from "../api/modelApi";
-import { useCallback, useEffect, useState } from "react";
+import {useCallback, useState} from "react";
 import axios from "axios";
-import {PersonSelection} from "./PersonSelection.tsx"
+import {type ButtonProp, PersonSelection} from "./PersonSelection.tsx"
+import {type NumberStreamOptions, useNumberStream} from "../helpers/NumberStream.ts";
 
 export function PosImageRecordingControls() {
     const [errorMessage,  setErrorMessage] = useState("");
     const [isProcessing, setIsProcessing] = useState(false);
-    const [imgNumber, setImgNumber] = useState<number>(0);
+    const [imgNumberPos, setImgNumberPos] = useState<number>(0);
+    const [imgNumberAnc, setImgNumberAnc] = useState<number>(0);
+
     const [recordingPerson, setRecordingPerson] = useState<string>("")
     const [isRecording, setIsRecording] = useState<boolean>(false);
 
@@ -20,7 +24,6 @@ export function PosImageRecordingControls() {
 
 
     const checkIsRecording = async () =>{
-        console.log ("image count", isShowImageCount)
         setIsProcessing(true);
         try{
             const response = await getCameraRecordingStatus();
@@ -35,77 +38,44 @@ export function PosImageRecordingControls() {
         }
         }
 
-    const startImageRecording = useCallback(async (person:string) => {
+
+
+    const startImageRecording = useCallback(async (person:string, apiFunc:(person:string)=>Promise<void>) => {
         setIsShowPeopleSelection(false);
         setIsProcessing(true);
         try {
-            await startRecording(person);
+            await apiFunc(person);
             await checkIsRecording()
         } catch (error) {
             setErrorMessage(getErrorMessage(error));
         } finally {
             setIsProcessing(false);
         }
-    }, [imgNumber]);
+    }, [imgNumberPos]);
 
-    useEffect(() => {
-        if (!recordingPerson) {
-            return;
+
+    const posStreamOptions:NumberStreamOptions = {
+        url: recordingPerson? getNumberPosStreamUrl(recordingPerson):null,
+        onValue: (count: number)=> setImgNumberPos(count),
+        onError: () => {
+            console.error("Recording status stream failed.")
+            setErrorMessage("Recording status stream failed.");
         }
-        const eventSource = new EventSource(
-            getNumberStreamUrl(recordingPerson),
-        );
+    }
 
-        eventSource.onmessage = (event) => {
-            console.log(event.data)
-            const count = Number(event.data);
-
-
-            if (!Number.isNaN(count)) {
-                setImgNumber(count);
-            }
-        };
-
-        eventSource.onerror = () => {
+    const ancStreamOptions:NumberStreamOptions = {
+        url: recordingPerson?  getNumberAncStreamUrl(recordingPerson): null,
+        onValue: (count: number)=> setImgNumberAnc(count),
+        onError: () => {
             console.error("Recording status stream failed.")
             setErrorMessage("Recording status stream failed.");
-        };
+        }
+    }
 
-        return () => {
-            eventSource.close();
-        };
-    }, [recordingPerson, setErrorMessage,]);
-
-    useEffect(() => {
-        console.log("isShowImageCount changed:", isShowImageCount);
-    }, [isShowImageCount]);
-
-/**
-    useEffect(() => {
-        type CameraStatus = {
-            recording: boolean;
-        };
+    useNumberStream(posStreamOptions)
+    useNumberStream(ancStreamOptions)
 
 
-        const eventSource = new EventSource(
-            getCameraStatusStream(),
-        );
-
-        eventSource.onmessage = (event:MessageEvent<string>) => {
-            const status = JSON.parse(event.data) as CameraStatus;
-            if (status.recording!== undefined)
-                setRecordingRecording(status.recording)
-        };
-        eventSource.onerror = () => {
-            console.error("Recording status stream failed.")
-            setErrorMessage("Recording status stream failed.");
-        };
-
-        return () => {
-            eventSource.close();
-        };
-    }, [recordingPerson, setErrorMessage]);
-        */
 
     const getErrorMessage = (error: unknown): string => {
         if (axios.isAxiosError(error)) {
@@ -120,6 +90,18 @@ export function PosImageRecordingControls() {
             ? error.message
             : "Camera action failed";
     };
+
+    const buttonProps: ButtonProp[] = [
+        {
+            text: "Start Recording Pos",
+            func: (person:string)=>startImageRecording(person, startRecordingPos)
+
+        },
+        {
+            text:"Start Recording Anc",
+            func: (person:string)=>startImageRecording(person, startRecordingAnc)
+        }
+    ]
 
     return (
         <>
@@ -151,7 +133,7 @@ export function PosImageRecordingControls() {
 
 
             { isShowPeopleSelection && (<PersonSelection
-            confirmButtonText={"Start Recording"}
+
             onPersonSelect={ (person:string)=>{
                 try {
                     setRecordingPerson(person)
@@ -161,16 +143,19 @@ export function PosImageRecordingControls() {
                     console.error(error);
                 }
             }}
-            onPersonConfirm={startImageRecording}
+            buttonProps={buttonProps}
+            onClose={()=>setIsShowPeopleSelection(false)}
             />)}
 
             {isShowImageCount && (<p>
-                Current images for person "{recordingPerson}": {imgNumber}
+                Current images for person "{recordingPerson}": pos {imgNumberPos}, anc {imgNumberAnc}
             </p>)}
 
-            {errorMessage && (<p>
+            {(errorMessage &&  false) && (<p>
                 {errorMessage}
             </p>)}
         </>)
 
 }
+
+

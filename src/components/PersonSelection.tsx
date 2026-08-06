@@ -2,17 +2,27 @@ import {useCallback, useEffect, useState} from "react";
 import {fetchPeopleForVerification} from "../api/modelApi.ts";
 import axios from "axios";
 
-/**
- * - addNewPerson: when function is given
- */
-export type Props = {
-    confirmButtonText:string
-    onPersonSelect: (person: string) => void;
-    onPersonConfirm: (person: string) => void;
-    addNewPerson?: (()=>Promise<void>);
+
+
+export type ButtonProp = {
+    text: string;
+    func: (person: string) => void;
 }
 
-export function PersonSelection({confirmButtonText, onPersonSelect, onPersonConfirm, addNewPerson}: Props) {
+/**
+ * - addNewPerson: when function for how to create a newPerson on the backend is given, creates a new selectable: newPerson
+ */
+export type Props = {
+    buttonProps: ButtonProp[];
+    onPersonSelect: (person: string) => void;
+    addNewPerson?: (()=>Promise<void>);
+    onClose:()=>void;
+}
+/**
+ * buttonProps -  creates a button for every ButtonProp
+ */
+export function PersonSelection({buttonProps, onPersonSelect, addNewPerson, onClose}: Props) {
+
     const [errorMessage, setErrorMessage] = useState<string>("");
     const [selectedPersonId, setSelectedPersonId] = useState("");
 
@@ -41,7 +51,7 @@ export function PersonSelection({confirmButtonText, onPersonSelect, onPersonConf
 
     }, [loadPeople]);
 
-    const confirmSelection = useCallback(async () => {
+    const confirmSelection = useCallback(async (onPersonConfirm:(person: string) => void) => {
         if (!selectedPersonId) {
             setErrorMessage("Select a person first.");
             return;
@@ -103,18 +113,26 @@ export function PersonSelection({confirmButtonText, onPersonSelect, onPersonConf
                         ))}
                     </select>
 
-                    <button
-                        type="button"
-                        disabled={ !selectedPersonId}
-                        onClick={() =>  confirmSelection()}
-                    >
-                        {confirmButtonText}
-                    </button>
+                    {buttonProps.map((buttonProp) => (
+                        <button
+                            key={buttonProp.text}
+                            type="button"
+                            disabled={!selectedPersonId}
+                            onClick={
+                                () => confirmSelection(
+                                    ()=>buttonProp.func(selectedPersonId)
+                                )
+                            }
+                        >
+                            {buttonProp.text}
+                        </button>
+                    ))}
 
                     <button
                         type="button"
                         onClick={() => {
                             setSelectedPersonId("");
+                            onClose()
                         }}
                     >
                         Close

@@ -1,7 +1,7 @@
 import {doIdentification, doVerification} from "../api/modelApi";
 import {useCallback, useState } from "react";
 import axios from "axios";
-import {CameraControls} from "./CameraControls.tsx";
+import {type ButtonProp, PersonSelection} from "./PersonSelection.tsx";
 
 
 type Props = {
@@ -10,6 +10,7 @@ type Props = {
 
 export function VerIdentControls({setMessage}:Props) {
     const [isProcessing, setIsProcessing] = useState(false);
+    const [isShowPeopleSelection, setIsShowPeopleSelection] = useState(false);
 
     const runIdentification = useCallback(async () => {
         setIsProcessing(true);
@@ -28,14 +29,14 @@ export function VerIdentControls({setMessage}:Props) {
 
 
     // @ts-ignore
-    const confirmVerification = useCallback(async (selectedPersonId:string) => {
+    const runVerification = async (selectedPersonId:string) => {
         if (!selectedPersonId) {
             setMessage("Select a person first.");
             return;
         }
         const response = await doVerification(selectedPersonId);
         setMessage(`Result: ${response.result}`);
-    }, );
+    }
 
     const getErrorMessage = (error: unknown): string => {
         if (axios.isAxiosError(error)) {
@@ -51,23 +52,45 @@ export function VerIdentControls({setMessage}:Props) {
             : "Camera action failed";
     };
 
+    const buttonProps: ButtonProp[] = [
+        {
+            text: "Verify",
+            func: async (person:string) =>{
+                setIsShowPeopleSelection(false)
+                setIsProcessing(true);
+                await runVerification(person)
+                setIsProcessing(false);
+            }
+
+        }
+    ]
+
     return (
     <>
-        <CameraControls
-            setMessage={setMessage}
-            buttonText={"Verify selected person"}
-            onPersonSelect={confirmVerification}
-            alwaysShowPeople={false}
-            isProcessing={isProcessing}
-            setIsProcessing={setIsProcessing} >
-             <button
-                type="button"
-                disabled={isProcessing}
-                onClick={runIdentification}
-            >
-                Identification
-            </button>
-       </CameraControls>
+        <button
+            type="button"
+            disabled={isProcessing || isShowPeopleSelection }
+            onClick={runIdentification}
+        >
+            Identification
+        </button>
+
+
+        <button
+            type="button"
+            disabled={isProcessing || isShowPeopleSelection }
+            onClick={()=>setIsShowPeopleSelection(true)}
+        >
+            Verification
+        </button>
+
+        {isShowPeopleSelection && (<PersonSelection
+            onPersonSelect={()=>{}}
+            buttonProps = {buttonProps}
+            onClose={()=>setIsShowPeopleSelection(false)}
+        />)}
+        
+
         </>)
 
 }

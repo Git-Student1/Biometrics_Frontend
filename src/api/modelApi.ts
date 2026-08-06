@@ -90,9 +90,13 @@ export async function fetchPeopleForVerification(){
     return response.data
 }
 
-export function getNumberStreamUrl(person: string): string {
+export function getNumberPosStreamUrl(person: string): string {
     return `${backendApi.defaults.baseURL}/camera/numberPositives/${encodeURIComponent(person)}`;
 }
+export function getNumberAncStreamUrl(person: string): string {
+    return `${backendApi.defaults.baseURL}/camera/numberAnchors/${encodeURIComponent(person)}`;
+}
+
 
 export function getCameraRecordingStatusStream(): string {
     return `${backendApi.defaults.baseURL}/camera/recordingstatusStream/`;
@@ -110,9 +114,16 @@ export async function getCameraRecordingStatus(): Promise<RecordingStatus> {
 }
 
 
-export async function startRecording(person: string){
+export async function startRecordingPos(person: string){
     await backendApi.post(
-        "/camera/startRecording",
+        "/camera/startRecordingPos",
+        {person:person}
+    );
+}
+
+export async function startRecordingAnc(person: string){
+    await backendApi.post(
+        "/camera/startRecordingAnc",
         {person:person}
     );
 }
