@@ -21,7 +21,6 @@ export function useNumberStream({
         eventSource.onmessage = (event: MessageEvent<string>) => {
 
             const value = Number(event.data);
-            console.log(value)
             if (Number.isFinite(value)) {
                 onValue(value);
             }

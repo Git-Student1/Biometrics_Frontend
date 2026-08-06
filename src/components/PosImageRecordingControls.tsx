@@ -34,7 +34,6 @@ export function PosImageRecordingControls() {
             setErrorMessage(getErrorMessage(error));
         } finally {
             setIsProcessing(false);
-            console.log(isProcessing);
         }
         }
 
