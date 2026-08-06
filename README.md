@@ -37,9 +37,8 @@ npm run dev
 
 
 # Next TODOs:
-1. add verification (+ person selection)
-1. add taking anchor/positive images (combine if possible + start stop instead of button pressing)
 1. add model training via frontend 
+1. adding new people (for  training /  verification & identification )
 
 
 
