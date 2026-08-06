@@ -7,6 +7,7 @@ import axios from "axios";
 */
 export type Props = {
     children?: ReactNode;
+    buttonText:string
     setMessage: Dispatch<SetStateAction<string>>;
     onPersonSelect: (person: string) => void;
     alwaysShowPeople: boolean;
@@ -15,7 +16,7 @@ export type Props = {
     setIsProcessing:Dispatch<SetStateAction<boolean>>;
 }
 
-export function CameraControls({children, setMessage, onPersonSelect, alwaysShowPeople, addNewPerson, isProcessing, setIsProcessing}: Props) {
+export function CameraControls({children, buttonText, setMessage, onPersonSelect, alwaysShowPeople, addNewPerson, isProcessing, setIsProcessing}: Props) {
 
     const [selectedPersonId, setSelectedPersonId] = useState("");
     const [showPersonSelection, setShowPersonSelection] = useState(false);
@@ -34,7 +35,8 @@ export function CameraControls({children, setMessage, onPersonSelect, alwaysShow
                 people.push(newPersonKey)
             setPeople(people)
 
-            setMessage("")
+
+            setMessage("Select a Person")
             setShowPersonSelection(true);
         } catch (error) {
             setMessage(getErrorMessage(error));
@@ -50,7 +52,7 @@ export function CameraControls({children, setMessage, onPersonSelect, alwaysShow
         }
     }, [alwaysShowPeople, showPeople]);
 
-    const confirmSelection = useCallback( async  () => {
+    const confirmSelection = useCallback(async () => {
         if (!selectedPersonId) {
             setMessage("Select a person first.");
             return;
@@ -97,19 +99,19 @@ export function CameraControls({children, setMessage, onPersonSelect, alwaysShow
                     disabled={isProcessing}
                     onClick={showPeople}
                 >
-                    Verification
+                    {buttonText}
                 </button>
 
             </div>
 
-            {showPersonSelection || alwaysShowPeople && (
+            {(showPersonSelection || alwaysShowPeople) && (
                 <div style={{ marginTop: 16 }}>
-                    <label htmlFor="verification-person">
-                        Person to verify
+                    <label htmlFor="person">
+                        Person
                     </label>
 
                     <select
-                        id="verification-person"
+                        id="select-person"
                         value={selectedPersonId}
                         disabled={isProcessing}
                         onChange={(event) =>
@@ -130,9 +132,9 @@ export function CameraControls({children, setMessage, onPersonSelect, alwaysShow
                     <button
                         type="button"
                         disabled={isProcessing || !selectedPersonId}
-                        onClick={() => void confirmSelection()}
+                        onClick={() =>  confirmSelection()}
                     >
-                        Verify selected person
+                        {buttonText}
                     </button>
 
                     <button

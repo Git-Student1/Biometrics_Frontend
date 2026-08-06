@@ -1,8 +1,7 @@
-import { useState } from 'react'
 import './App.css'
-import  Button  from './components/Button'
 import ModelList from "./components/ModelsList"
 import { VerIdent } from "./components/VerIdent"
+import {PosImageRecording} from "./components/PosImageRecording.tsx";
 
 
 function App() {
@@ -10,6 +9,7 @@ function App() {
     return (
         <>
             <ModelList />
+            <PosImageRecording/>
             <VerIdent/>
         </>
 )

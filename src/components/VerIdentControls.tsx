@@ -53,7 +53,13 @@ export function VerIdentControls({setMessage}:Props) {
 
     return (
     <>
-        <CameraControls setMessage={setMessage} onPersonSelect={confirmVerification} alwaysShowPeople={false} isProcessing={isProcessing} setIsProcessing={setIsProcessing} >
+        <CameraControls
+            setMessage={setMessage}
+            buttonText={"Verify selected person"}
+            onPersonSelect={confirmVerification}
+            alwaysShowPeople={false}
+            isProcessing={isProcessing}
+            setIsProcessing={setIsProcessing} >
              <button
                 type="button"
                 disabled={isProcessing}

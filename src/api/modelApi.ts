@@ -90,5 +90,27 @@ export async function fetchPeopleForVerification(){
     return response.data
 }
 
+export function getNumberStreamUrl(person: string): string {
+    return `${backendApi.defaults.baseURL}/camera/numberPositives/${encodeURIComponent(person)}`;
+}
+
+export function getCameraStatusStream(): string {
+    return `${backendApi.defaults.baseURL}/camera/statusstream/`;
+}
+
+
+export async function startRecording(person: string){
+    await backendApi.post(
+        "/camera/startRecording",
+        {person:person}
+    );
+}
+
+export async function stopRecording(){
+    await backendApi.post(
+        "/camera/stopRecording",
+    );
+}
+
 
 //export async function loadModel():...

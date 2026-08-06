@@ -37,6 +37,7 @@ export function CameraInteraction({children, message, setMessage}:Props) {
                         error.message,
                     );
                 } else {
+                    console.error(error);
                     setMessage("Could not check camera status.");
                 }
             }
