@@ -12,6 +12,8 @@ const backendApi = axios.create({
     },
 });
 
+// -------------------------------------------- model -----------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------
 
 export async function fetchModels(): Promise<string[]> {
     const response = await backendApi.get<ModelsResponse>(
@@ -24,12 +26,13 @@ export async function fetchModels(): Promise<string[]> {
     return response.data.models;
 }
 
-interface ModelLoadingResponse{
+interface SuccessResponse{
     success:boolean
+    details:string
 }
 
 export async function selectModel(model:string){
-    const response = await backendApi.post<ModelLoadingResponse>(
+    const response = await backendApi.post<SuccessResponse>(
         "/selectModel",
         {
             model_name:model
@@ -43,6 +46,44 @@ export type VerIdentResponse = {
     details:string
 };
 
+// ---------------------- model training -----------------------
+
+export function getModelTrainingMessagesStream(): string {
+    return `${backendApi.defaults.baseURL}/model/training/messages`;
+}
+
+export async function startModelTraining(){
+    const response = await backendApi.post<SuccessResponse>(
+        "/model/training/start",
+    )
+    return response.data
+}
+
+export async function stopModelTraining(){
+    const response = await backendApi.post<SuccessResponse>(
+        "/model/training/stop",
+    )
+    return response.data
+}
+
+// ----------------------------------------------------  camera -------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------
+export function getCameraStreamUrl(): string {
+    return `${backendApi.defaults.baseURL}/camera/stream`;
+}
+
+export type CameraStatusResponse = {
+    active:boolean
+    error:string
+};
+
+export async function getCameraStatus() {
+    const response = await backendApi.get<CameraStatusResponse>("/camera/status")
+    return response.data;
+}
+
+//-------------------------------------------- identification /  verification -----------------------------------------
+//---------------------------------------------------------------------------------------------------------------------
 export async function doIdentification(
 ): Promise<VerIdentResponse>{
     const response = await backendApi.post<VerIdentResponse>(
@@ -63,32 +104,24 @@ export async function doVerification(person:string
     return response.data;
 }
 
-
-
-export function getCameraStreamUrl(): string {
-    return `${backendApi.defaults.baseURL}/camera/stream`;
-}
-
-export type CameraStatusResponse = {
-    active:boolean
-    error:string
-};
-
-export async function getCameraStatus() {
-    const response = await backendApi.get<CameraStatusResponse>("/camera/status")
-    return response.data;
-}
-
-export type PeopleForVerify = {
-    people:string[]
-}
-
 export async function fetchPeopleForVerification(){
     const response = await backendApi.get<PeopleForVerify>(
         "/peopleForVerification"
     );
     return response.data
 }
+
+
+
+
+
+export type PeopleForVerify = {
+    people:string[]
+}
+
+
+//-------------------------------------   Positives / Negatives Recording ---------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------
 
 export function getNumberPosStreamUrl(person: string): string {
     return `${backendApi.defaults.baseURL}/camera/numberPositives/${encodeURIComponent(person)}`;

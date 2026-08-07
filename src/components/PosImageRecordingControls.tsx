@@ -8,7 +8,7 @@ import {
 import {useCallback, useState} from "react";
 import axios from "axios";
 import {type ButtonProp, PersonSelection} from "./PersonSelection.tsx"
-import {type NumberStreamOptions, useNumberStream} from "../helpers/NumberStream.ts";
+import {type NumberStreamOptions, useNumberStream} from "../helpers/Streams.ts";
 
 export function PosImageRecordingControls() {
     const [errorMessage,  setErrorMessage] = useState("");
