@@ -7,6 +7,7 @@ export function PosImageRecording() {
 
     return (
         <CameraInteraction message={message} setMessage={setMessage}>
+
             <PosImageRecordingControls/>
             <p>{message}</p>
         </CameraInteraction>

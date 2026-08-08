@@ -4,12 +4,16 @@ import { selectModel } from "../api/modelApi"
 
 
 
-export default function ModelsList() {
+export type Props = {
+    onModelLoaded:(model:string)=>void
+}
+
+export default function ModelsList( {onModelLoaded}: Props ) {
     const { models, isLoading, error } = useModels();
     const handleModelSelection = (model:string) => {
         try {
             selectModel(model).then(
-                //popup that it was loaded
+                ()=>onModelLoaded(model)
             ).catch(
                 //popup that it failed
             )

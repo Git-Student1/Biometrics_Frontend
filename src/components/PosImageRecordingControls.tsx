@@ -9,6 +9,7 @@ import {useCallback, useState} from "react";
 import axios from "axios";
 import {type ButtonProp, PersonSelection} from "./PersonSelection.tsx"
 import {type NumberStreamOptions, useNumberStream} from "../helpers/Streams.ts";
+import styles from "../Styles/Styles.module.css"
 
 export function PosImageRecordingControls() {
     const [errorMessage,  setErrorMessage] = useState("");
@@ -102,6 +103,14 @@ export function PosImageRecordingControls() {
         }
     ]
 
+    const stopImageRecording =  async () =>{
+        await stopRecording()
+        setIsShowImageCount(false);
+        setRecordingPerson("")
+        void checkIsRecording()
+
+    }
+
     return (
         <>
             <button
@@ -111,6 +120,7 @@ export function PosImageRecordingControls() {
                  setIsShowPeopleSelection(true);
 
                 }}
+                className={`${styles.button} ${styles.primary}`}
             >
                 Select Person for Recording
             </button>
@@ -118,41 +128,40 @@ export function PosImageRecordingControls() {
             <button
                 type="button"
                 disabled={isProcessing || isShowPeopleSelection || !isRecording}
-                onClick={()=> {
-                    stopRecording().then(() => {
-                        setIsShowImageCount(false);
-                        setRecordingPerson("")
-                        void checkIsRecording()
-                    })
-
-                }}
+                onClick={stopImageRecording}
+                className={`${styles.button} ${styles.secondary}`}
             >
                 Stop Recording
             </button>
 
 
-            { isShowPeopleSelection && (<PersonSelection
+            { isShowPeopleSelection && (
+                <PersonSelection
+                onPersonSelect={ (person:string)=>{
+                    try {
+                        setRecordingPerson(person)
+                        setIsShowImageCount(true)
+                    }
+                    catch (error) {
+                        console.error(error);
+                    }
+                }}
+                buttonProps={buttonProps}
+                onClose={()=>setIsShowPeopleSelection(false)}
+                />)
+            }
 
-            onPersonSelect={ (person:string)=>{
-                try {
-                    setRecordingPerson(person)
-                    setIsShowImageCount(true)
-                }
-                catch (error) {
-                    console.error(error);
-                }
-            }}
-            buttonProps={buttonProps}
-            onClose={()=>setIsShowPeopleSelection(false)}
-            />)}
+            {isShowImageCount && (
+                <p className={`${styles.text} ${styles.info}`}>
+                    Current images for person "{recordingPerson}": pos {imgNumberPos}, anc {imgNumberAnc}
+                </p>)
+            }
 
-            {isShowImageCount && (<p>
-                Current images for person "{recordingPerson}": pos {imgNumberPos}, anc {imgNumberAnc}
-            </p>)}
-
-            {(errorMessage &&  false) && (<p>
-                {errorMessage}
-            </p>)}
+            {(errorMessage &&  false) && (
+                <p className={`${styles.text} ${styles.error}`}>
+                    {errorMessage}
+                </p>)
+            }
         </>)
 
 }

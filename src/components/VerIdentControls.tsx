@@ -2,6 +2,7 @@ import {doIdentification, doVerification} from "../api/modelApi";
 import {useCallback, useState } from "react";
 import axios from "axios";
 import {type ButtonProp, PersonSelection} from "./PersonSelection.tsx";
+import styles from "../Styles/Styles.module.css";
 
 
 type Props = {
@@ -66,11 +67,12 @@ export function VerIdentControls({setMessage}:Props) {
     ]
 
     return (
-    <>
+    <div>
         <button
             type="button"
             disabled={isProcessing || isShowPeopleSelection }
             onClick={runIdentification}
+            className={`${styles.button} ${styles.primary}`}
         >
             Identification
         </button>
@@ -80,6 +82,7 @@ export function VerIdentControls({setMessage}:Props) {
             type="button"
             disabled={isProcessing || isShowPeopleSelection }
             onClick={()=>setIsShowPeopleSelection(true)}
+            className={`${styles.button} ${styles.primary}`}
         >
             Verification
         </button>
@@ -88,9 +91,10 @@ export function VerIdentControls({setMessage}:Props) {
             onPersonSelect={()=>{}}
             buttonProps = {buttonProps}
             onClose={()=>setIsShowPeopleSelection(false)}
+
         />)}
         
 
-        </>)
+        </div>)
 
 }

@@ -3,6 +3,7 @@ import {type ReactNode, useEffect, useState} from "react";
 
 import {getCameraStatus, getCameraStreamUrl} from "../api/modelApi"
 import axios from "axios";
+import styles from "../Styles/Styles.module.css"
 
 
 type Props  = {
@@ -47,7 +48,7 @@ export function CameraInteraction({children, message, setMessage}:Props) {
     }, [setMessage]);
 
     return (
-        <section>
+        <section className={styles.cameraInteraction}>
             {(streamReady && <img
                 src={getCameraStreamUrl()}
                 alt="Live camera"
@@ -71,6 +72,7 @@ export function CameraInteraction({children, message, setMessage}:Props) {
                     );
                     setMessage("Camera stream could not be loaded");
                 }}
+                className={"camera-stream"}
                 />)}
 
             { streamReady && children}

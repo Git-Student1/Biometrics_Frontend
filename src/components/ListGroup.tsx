@@ -13,7 +13,7 @@ const ListGroup = ({title, items, handleClick}:Props)=>{
     const [selectedIndex, setSelected] = useState(-1)
 
     return <>
-        <h2>{title}</h2>
+        <h3>{title}</h3>
         <ul className="list-group">
             {items.map((item, index)=>(
                 <li key={item}

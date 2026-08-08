@@ -1,6 +1,7 @@
 import {useCallback, useEffect, useState} from "react";
 import {fetchPeopleForVerification} from "../api/modelApi.ts";
 import axios from "axios";
+import styles from "../Styles/Styles.module.css";
 
 
 
@@ -39,8 +40,6 @@ export function PersonSelection({buttonProps, onPersonSelect, addNewPerson, onCl
                 people.push(newPersonKey)
             setPeople(people)
 
-
-            setErrorMessage("Select a Person")
         } catch (error) {
             setErrorMessage(getErrorMessage(error));
         }
@@ -123,6 +122,7 @@ export function PersonSelection({buttonProps, onPersonSelect, addNewPerson, onCl
                                     ()=>buttonProp.func(selectedPersonId)
                                 )
                             }
+                            className={`${styles.button} ${styles.primary}`}
                         >
                             {buttonProp.text}
                         </button>
@@ -134,6 +134,7 @@ export function PersonSelection({buttonProps, onPersonSelect, addNewPerson, onCl
                             setSelectedPersonId("");
                             onClose()
                         }}
+                        className={`${styles.button} ${styles.secondary}`}
                     >
                         Close
                     </button>

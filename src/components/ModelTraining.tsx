@@ -2,6 +2,7 @@ import { type StringStreamOptions, useStartableStringStream } from "../helpers/S
 import { getModelTrainingMessagesStream, startModelTraining, stopModelTraining} from "../api/modelApi.ts";
 import { useState } from "react";
 import { getErrorMessage } from "../helpers/Errors.ts";
+import styles from "../Styles/Styles.module.css";
 
 
 export function ModelTraining(){
@@ -46,7 +47,7 @@ export function ModelTraining(){
     };
 
     const {
-        startMessageStream, stopMessageStream, isActive
+        startMessageStream
     } = useStartableStringStream(streamProps)
 
 
@@ -59,20 +60,22 @@ export function ModelTraining(){
                     type="button"
                     disabled={isTraining}
                     onClick={startTraining}
+                    className={`${styles.button} ${styles.primary}`}
                 >
-                    Start Stream
+                    Start Training
                 </button>
 
                 <button
                     type="button"
                     disabled={!isTraining}
                     onClick={stopTraining}
+                    className={`${styles.button} ${styles.secondary}`}
                 >
                     Stop Training
                 </button>
             </div>
-            <p>{trainingMessage}</p>
-            <p>{errorText}</p>
+            <p className={`${styles.text} ${styles.info}`}>{trainingMessage}</p>
+            <p className={`${styles.text} ${styles.error}`}>{errorText}</p>
         </>
     )
 
