@@ -1,8 +1,14 @@
-import {doIdentification, doVerification} from "../api/modelApi";
+import {
+    doIdentification,
+    doVerification,
+    fetchPeopleQualifyingForVerification
+} from "../api/modelApi";
 import {useCallback, useState } from "react";
 import axios from "axios";
 import {type ButtonProp, PersonSelection} from "./PersonSelection.tsx";
 import styles from "../Styles/Styles.module.css";
+import {VerIdentImageRecordingControls} from "./VerIdentImageRecoringControls.tsx";
+import {VerIdentImageCount} from "./VerIdentImageCount.tsx";
 
 
 type Props = {
@@ -12,6 +18,8 @@ type Props = {
 export function VerIdentControls({setMessage}:Props) {
     const [isProcessing, setIsProcessing] = useState(false);
     const [isShowPeopleSelection, setIsShowPeopleSelection] = useState(false);
+    const [isAddingNewPerson, setIsAddingNewPerson] = useState(false);
+    const [selectedPerson, setSelectedPerson] = useState<string>("");
 
     const runIdentification = useCallback(async () => {
         setIsProcessing(true);
@@ -65,36 +73,82 @@ export function VerIdentControls({setMessage}:Props) {
 
         }
     ]
+    const showAddNewPeopleDialog = () => {
+        setIsAddingNewPerson(true);
+    }
+
+
 
     return (
-    <div>
-        <button
-            type="button"
-            disabled={isProcessing || isShowPeopleSelection }
-            onClick={runIdentification}
-            className={`${styles.button} ${styles.primary}`}
-        >
-            Identification
-        </button>
+        <>
+            {!isAddingNewPerson && (
+                <div>
+                    <div>
+                        <button
+                            type="button"
+                            disabled={isProcessing || isShowPeopleSelection }
+                            onClick={showAddNewPeopleDialog}
+                            className={`${styles.button} ${styles.primary}`}
+                        >
+                            Add new people or images
+                        </button>
+                    </div>
 
 
-        <button
-            type="button"
-            disabled={isProcessing || isShowPeopleSelection }
-            onClick={()=>setIsShowPeopleSelection(true)}
-            className={`${styles.button} ${styles.primary}`}
-        >
-            Verification
-        </button>
+                    <div>
+                        <button
+                            type="button"
+                            disabled={isProcessing || isShowPeopleSelection }
+                            onClick={runIdentification}
+                            className={`${styles.button} ${styles.primary}`}
+                        >
+                            Identification
+                        </button>
 
-        {isShowPeopleSelection && (<PersonSelection
-            onPersonSelect={()=>{}}
-            buttonProps = {buttonProps}
-            onClose={()=>setIsShowPeopleSelection(false)}
 
-        />)}
-        
+                        <button
+                            type="button"
+                            disabled={isProcessing || isShowPeopleSelection }
+                            onClick={()=>setIsShowPeopleSelection(true)}
+                            className={`${styles.button} ${styles.primary}`}
+                        >
+                            Verification
+                        </button>
 
-        </div>)
+
+                    </div>
+                    <div>
+                        {isShowPeopleSelection && (<PersonSelection
+                            fetchPeopleFn={fetchPeopleQualifyingForVerification}
+                            onPersonSelect={setSelectedPerson}
+                            buttonProps = {buttonProps}
+                            onClose={()=>{setIsShowPeopleSelection(false)}}
+
+                        />)}
+                    </div>
+                    <div>
+                        {(isShowPeopleSelection && (selectedPerson!=="")) && (
+                            <VerIdentImageCount recordingPerson={selectedPerson}/>)}
+
+                    </div>
+
+                </div>)}
+            {isAddingNewPerson && (
+                <div>
+                    <VerIdentImageRecordingControls/>
+                    <button
+                        type="button"
+                        className={`${styles.button} ${styles.secondary}`}
+                        onClick={()=>{
+                            setIsShowPeopleSelection(false);
+                            setSelectedPerson("")
+                            setIsAddingNewPerson(false)}}
+                    >
+                        close
+                    </button>
+                </div>
+                )}
+
+        </>)
 
 }

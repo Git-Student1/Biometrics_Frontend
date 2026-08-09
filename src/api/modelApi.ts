@@ -104,15 +104,38 @@ export async function doVerification(person:string
     return response.data;
 }
 
-export async function fetchPeopleForVerification(){
+export async function fetchPeopleQualifyingForVerification(){
     const response = await backendApi.get<PeopleForVerify>(
-        "/peopleForVerification"
+        "/people/prediction/qualifying"
     );
-    return response.data
+    return response.data.people
+}
+
+export async function fetchAllVerIdentPeople(){
+    const response = await backendApi.get<PeopleForVerify>(
+        "/people/prediction/all"
+    );
+    return response.data.people
+}
+
+export async function addVerIdentPerson(person:string){
+    await backendApi.post(
+        "/camera/addVerIdentPerson",
+        {person:person}
+    )
+}
+
+export function getNumberImgVerIdentStreamUrl(person: string): string {
+    return `${backendApi.defaults.baseURL}/camera/numberPredictionImgs/${encodeURIComponent(person)}`;
 }
 
 
-
+export async function startRecordingVerIdent(person: string){
+    await backendApi.post(
+            "/camera/startRecordingPred",
+        {person:person}
+    );
+}
 
 
 export type PeopleForVerify = {
@@ -166,6 +189,21 @@ export async function stopRecording(){
         "/camera/stopRecording",
     );
 }
+
+export async function addTrainingPerson(person:string){
+    await backendApi.post(
+        "/camera/addTrainingPerson",
+        {person:person}
+    )
+}
+
+export async function fetchTrainingPeople(){
+    const response = await backendApi.get<PeopleForVerify>(
+        "/people/training"
+    );
+    return response.data.people
+}
+
 
 
 //export async function loadModel():...

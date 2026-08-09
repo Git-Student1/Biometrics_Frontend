@@ -1,0 +1,53 @@
+import {
+    addVerIdentPerson,
+    fetchAllVerIdentPeople,
+    startRecordingVerIdent,
+} from "../api/modelApi";
+import {useState} from "react";
+
+import {type ButtonProp} from "./PersonSelection.tsx"
+
+import {ImageRecordingControls} from "./ImageRecordingControls.tsx";
+import {VerIdentImageCount} from "./VerIdentImageCount.tsx";
+
+export function VerIdentImageRecordingControls() {
+    const [errorMessage,  setErrorMessage] = useState("");
+
+    const [recordingPerson, setRecordingPerson] = useState<string>("")
+    const [isShowImageCount, setIsShowImageCount] = useState<boolean>(false);
+
+
+
+
+
+
+
+    const buttonProps: ButtonProp[] = [
+        {
+            text: "Start Recording Pos",
+            func:  startRecordingVerIdent
+
+        }
+    ]
+
+    return (
+        <>
+            <ImageRecordingControls
+                setRecordingPerson={setRecordingPerson}
+                setIsShowImageCount={setIsShowImageCount}
+                buttonProps={buttonProps}
+                errorMessage={errorMessage}
+                setErrorMessage={setErrorMessage}
+                fetchPeopleFn={fetchAllVerIdentPeople}
+                addPeopleFn={addVerIdentPerson}
+            />
+            { isShowImageCount &&(<VerIdentImageCount recordingPerson={recordingPerson}/>)}
+
+
+
+        </>
+    );
+
+}
+
+

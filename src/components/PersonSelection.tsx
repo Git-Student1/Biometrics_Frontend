@@ -1,13 +1,13 @@
-import {useCallback, useEffect, useState} from "react";
-import {fetchPeopleForVerification} from "../api/modelApi.ts";
+import { useCallback, useEffect, useState} from "react";
 import axios from "axios";
 import styles from "../Styles/Styles.module.css";
+import {AddPerson} from "./AddPerson.tsx";
 
 
 
 export type ButtonProp = {
     text: string;
-    func: (person: string) => void;
+    func: (person: string) => Promise<void>;
 }
 
 /**
@@ -16,18 +16,20 @@ export type ButtonProp = {
 export type Props = {
     buttonProps: ButtonProp[];
     onPersonSelect: (person: string) => void;
-    addNewPerson?: (()=>Promise<void>);
-    onClose:()=>void;
+    addNewPerson?: ((person:string)=>Promise<void>);
+    onClose?:()=>void;
+    fetchPeopleFn:()=>Promise<string[]>
 }
 /**
  * buttonProps -  creates a button for every ButtonProp
  */
-export function PersonSelection({buttonProps, onPersonSelect, addNewPerson, onClose}: Props) {
+export function PersonSelection({buttonProps, onPersonSelect, addNewPerson, onClose, fetchPeopleFn}: Props) {
 
     const [errorMessage, setErrorMessage] = useState<string>("");
     const [selectedPersonId, setSelectedPersonId] = useState("");
 
     const [people, setPeople] = useState<string[]>([])
+    const [isAddingNewPerson, setIsAddingNewPerson] = useState(false);
 
     const newPersonKey = "newPerson"
 
@@ -35,7 +37,7 @@ export function PersonSelection({buttonProps, onPersonSelect, addNewPerson, onCl
     const loadPeople = useCallback(async () => {
         setErrorMessage("");
         try {
-            const {people} = await fetchPeopleForVerification()
+            const people = await fetchPeopleFn()
             if (addNewPerson !== undefined)
                 people.push(newPersonKey)
             setPeople(people)
@@ -57,12 +59,7 @@ export function PersonSelection({buttonProps, onPersonSelect, addNewPerson, onCl
         }
         setErrorMessage("");
         try {
-            if (selectedPersonId=== newPersonKey)
-                if (addNewPerson)
-                    await addNewPerson();
-                else throw Error("Adding a person is not available.")
-            else
-                onPersonConfirm(selectedPersonId)
+            onPersonConfirm(selectedPersonId)
         } catch (error) {
             setErrorMessage(getErrorMessage(error));
         }
@@ -82,12 +79,34 @@ export function PersonSelection({buttonProps, onPersonSelect, addNewPerson, onCl
             : "Camera action failed";
     };
 
+
+    const onPersonAdd = async (person:string) => {
+        if(!addNewPerson)
+            throw Error("Adding a Person is not permitted for this element. Internal logic error.");
+        await addNewPerson(person)
+        setIsAddingNewPerson(false)
+
+    }
+
+
+    const onPersenSelectionChange = (person:string) => {
+        setSelectedPersonId(person)
+
+        if(person === newPersonKey)
+            if (addNewPerson)
+                setIsAddingNewPerson(true);
+            else throw Error("Adding a person is not available.")
+
+        else if (person)
+            onPersonSelect(person)
+    }
+
     return (
         <>
             <div style={{ display: "flex", gap: 8 }}>
 
 
-                <div style={{ marginTop: 16 }}>
+                {!isAddingNewPerson &&(<div style={{ marginTop: 16 }}>
 
                     <select
                         id="select-person"
@@ -95,9 +114,7 @@ export function PersonSelection({buttonProps, onPersonSelect, addNewPerson, onCl
                         onFocus={() => void loadPeople()}
                         onChange={(event) => {
                             const person = event.target.value
-                            setSelectedPersonId(person)
-                            if (person)
-                                onPersonSelect(person)
+                            onPersenSelectionChange(person)
                             }
                         }
                     >
@@ -128,7 +145,7 @@ export function PersonSelection({buttonProps, onPersonSelect, addNewPerson, onCl
                         </button>
                     ))}
 
-                    <button
+                    { onClose && (<button
                         type="button"
                         onClick={() => {
                             setSelectedPersonId("");
@@ -136,9 +153,11 @@ export function PersonSelection({buttonProps, onPersonSelect, addNewPerson, onCl
                         }}
                         className={`${styles.button} ${styles.secondary}`}
                     >
-                        Close
+                            Close
                     </button>
-                </div>
+                        )}
+                </div>)}
+                {isAddingNewPerson && (<AddPerson onPersonAdd={onPersonAdd} onClose={()=>setIsAddingNewPerson(false)}/>)}
 
                 {(errorMessage && <p color={"red"}>{errorMessage}</p>)}
             </div>
