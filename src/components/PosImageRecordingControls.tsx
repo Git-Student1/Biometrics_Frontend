@@ -68,6 +68,7 @@ export function PosImageRecordingControls() {
               setErrorMessage={setErrorMessage}
               fetchPeopleFn={fetchTrainingPeople}
               addPeopleFn={addTrainingPerson}
+              selectButtonBeforeSelection={true}
           />
             {isShowImageCount && (
                 <p className={`${styles.text} ${styles.info}`}>

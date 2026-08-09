@@ -40,6 +40,7 @@ export function VerIdentImageRecordingControls() {
                 setErrorMessage={setErrorMessage}
                 fetchPeopleFn={fetchAllVerIdentPeople}
                 addPeopleFn={addVerIdentPerson}
+                selectButtonBeforeSelection={false}
             />
             { isShowImageCount &&(<VerIdentImageCount recordingPerson={recordingPerson}/>)}
 

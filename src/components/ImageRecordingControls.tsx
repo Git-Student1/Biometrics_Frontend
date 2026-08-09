@@ -2,7 +2,7 @@ import {
     getCameraRecordingStatus,
     stopRecording
 } from "../api/modelApi";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {type ButtonProp, PersonSelection} from "./PersonSelection.tsx"
 import styles from "../Styles/Styles.module.css"
 import {getErrorMessage} from "../helpers/Errors.ts";
@@ -16,13 +16,31 @@ export type Props = {
     setErrorMessage: React.Dispatch<React.SetStateAction<string>>
     fetchPeopleFn:()=>Promise<string[]>
     addPeopleFn:(person:string)=>Promise<void>
+    selectButtonBeforeSelection: boolean
 }
 
 
-export function ImageRecordingControls({buttonProps, setRecordingPerson, setIsShowImageCount, errorMessage, setErrorMessage, fetchPeopleFn, addPeopleFn}: Props) {
+export function ImageRecordingControls({buttonProps, setRecordingPerson, setIsShowImageCount, errorMessage, setErrorMessage, fetchPeopleFn, addPeopleFn, selectButtonBeforeSelection}: Props) {
     const [isProcessing, setIsProcessing] = useState(false);
     const [isRecording, setIsRecording] = useState<boolean>(false);
-    const [isShowPeopleSelection, setIsShowPeopleSelection] = useState(false);
+
+
+    const [doShowPeopleSelection, setDoShowPeopleSelection] = useState(!selectButtonBeforeSelection);
+
+
+    useEffect(()=>{
+        if (isRecording)
+            setDoShowPeopleSelection(false)
+        else if (!selectButtonBeforeSelection)
+            setDoShowPeopleSelection(true)
+    }, [isRecording, doShowPeopleSelection])
+
+    useEffect(()=> {
+      return ()=>{
+          void stopRecording();
+      }
+    }, [])
+
 
 
     const checkIsRecording = async () =>{
@@ -42,7 +60,7 @@ export function ImageRecordingControls({buttonProps, setRecordingPerson, setIsSh
 
 
     const startImageRecording = async (person:string, apiFunc:(person:string)=>Promise<void>) => {
-        setIsShowPeopleSelection(false);
+        setDoShowPeopleSelection(false);
         setIsProcessing(true);
         try {
             await apiFunc(person);
@@ -71,21 +89,21 @@ export function ImageRecordingControls({buttonProps, setRecordingPerson, setIsSh
 
     return (
         <>
-            <button
+        {selectButtonBeforeSelection && (<button
                 type="button"
-                disabled={isProcessing || isShowPeopleSelection || isRecording}
+                disabled={isProcessing || doShowPeopleSelection || isRecording}
                 onClick={()=> {
-                    setIsShowPeopleSelection(true);
+                    setDoShowPeopleSelection(true);
 
                 }}
                 className={`${styles.button} ${styles.primary}`}
             >
                 Select Person for Recording
-            </button>
+            </button>)}
 
             <button
                 type="button"
-                disabled={isProcessing || isShowPeopleSelection || !isRecording}
+                disabled={isProcessing || doShowPeopleSelection || !isRecording}
                 onClick={stopImageRecording}
                 className={`${styles.button} ${styles.secondary}`}
             >
@@ -93,7 +111,7 @@ export function ImageRecordingControls({buttonProps, setRecordingPerson, setIsSh
             </button>
 
 
-            { isShowPeopleSelection && (
+            { doShowPeopleSelection && (
                 <PersonSelection
                     onPersonSelect={ (person:string)=>{
                         try {
@@ -105,7 +123,7 @@ export function ImageRecordingControls({buttonProps, setRecordingPerson, setIsSh
                         }
                     }}
                     buttonProps={buttonProps}
-                    onClose={()=>setIsShowPeopleSelection(false)}
+                    onClose={selectButtonBeforeSelection?()=>setDoShowPeopleSelection(false):undefined}
                     addNewPerson={addPeopleFn}
                     fetchPeopleFn={fetchPeopleFn}
                 />)

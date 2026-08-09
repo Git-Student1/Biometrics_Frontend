@@ -37,8 +37,7 @@ npm run dev
 
 
 # Next TODOs:
-1. add model training via frontend 
-1. adding new people (for  training /  verification & identification )
+1. Bug: once you stop model training, the feedback stream is not shown
 
 
 

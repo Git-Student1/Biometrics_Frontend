@@ -17,7 +17,7 @@ const backendApi = axios.create({
 
 export async function fetchModels(): Promise<string[]> {
     const response = await backendApi.get<ModelsResponse>(
-        "/models",
+        "/model/models",
         {
             timeout: 5000,
         }
@@ -33,7 +33,7 @@ interface SuccessResponse{
 
 export async function selectModel(model:string){
     const response = await backendApi.post<SuccessResponse>(
-        "/selectModel",
+        "/model/    selectModel",
         {
             model_name:model
         }
