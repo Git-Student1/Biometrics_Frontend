@@ -120,13 +120,13 @@ export async function fetchAllVerIdentPeople(){
 
 export async function addVerIdentPerson(person:string){
     await backendApi.post(
-        "/camera/addVerIdentPerson",
+        "/people/addVerIdentPerson",
         {person:person}
     )
 }
 
 export function getNumberImgVerIdentStreamUrl(person: string): string {
-    return `${backendApi.defaults.baseURL}/camera/numberPredictionImgs/${encodeURIComponent(person)}`;
+    return `${backendApi.defaults.baseURL}/people/numberPredictionImgs/${encodeURIComponent(person)}`;
 }
 
 
@@ -147,10 +147,10 @@ export type PeopleForVerify = {
 //---------------------------------------------------------------------------------------------------------------------
 
 export function getNumberPosStreamUrl(person: string): string {
-    return `${backendApi.defaults.baseURL}/camera/numberPositives/${encodeURIComponent(person)}`;
+    return `${backendApi.defaults.baseURL}/people/numberPositives/${encodeURIComponent(person)}`;
 }
 export function getNumberAncStreamUrl(person: string): string {
-    return `${backendApi.defaults.baseURL}/camera/numberAnchors/${encodeURIComponent(person)}`;
+    return `${backendApi.defaults.baseURL}/people/numberAnchors/${encodeURIComponent(person)}`;
 }
 
 
@@ -192,7 +192,7 @@ export async function stopRecording(){
 
 export async function addTrainingPerson(person:string){
     await backendApi.post(
-        "/camera/addTrainingPerson",
+        "/people/addTrainingPerson",
         {person:person}
     )
 }
