@@ -1,11 +1,8 @@
-import {
-    getCameraRecordingStatus,
-    stopRecording
-} from "../api/modelApi";
 import {useEffect, useState} from "react";
 import {type ButtonProp, PersonSelection} from "./PersonSelection.tsx"
 import styles from "../Styles/Styles.module.css"
 import {getErrorMessage} from "../helpers/Errors.ts";
+import {getCameraRecordingStatus, stopRecording} from "../api/camera.ts";
 
 
 export type Props = {

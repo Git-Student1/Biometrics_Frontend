@@ -1,14 +1,12 @@
-import {
-    addVerIdentPerson,
-    fetchAllVerIdentPeople,
-    startRecordingVerIdent,
-} from "../api/modelApi";
 import {useState} from "react";
 
 import {type ButtonProp} from "./PersonSelection.tsx"
 
 import {ImageRecordingControls} from "./ImageRecordingControls.tsx";
 import {VerIdentImageCount} from "./VerIdentImageCount.tsx";
+import {startRecordingVerIdent} from "../api/camera.ts";
+
+import {addVerIdentPerson, fetchAllVerIdentPeople} from "../api/people.ts";
 
 export function VerIdentImageRecordingControls() {
     const [errorMessage,  setErrorMessage] = useState("");

@@ -1,14 +1,12 @@
-import {
-    doIdentification,
-    doVerification,
-    fetchPeopleQualifyingForVerification
-} from "../api/modelApi";
 import {useCallback, useState } from "react";
 import axios from "axios";
 import {type ButtonProp, PersonSelection} from "./PersonSelection.tsx";
 import styles from "../Styles/Styles.module.css";
 import {VerIdentImageRecordingControls} from "./VerIdentImageRecoringControls.tsx";
 import {VerIdentImageCount} from "./VerIdentImageCount.tsx";
+import {doIdentification, doVerification} from "../api/camera.ts";
+
+import {fetchPeopleQualifyingForVerification} from "../api/people.ts";
 
 
 type Props = {

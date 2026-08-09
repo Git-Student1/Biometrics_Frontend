@@ -1,7 +1,8 @@
 import styles from "../Styles/Styles.module.css";
 import {type NumberStreamOptions, useNumberStream} from "../helpers/Streams.ts";
-import {getNumberImgVerIdentStreamUrl} from "../api/modelApi.ts";
 import {useState} from "react";
+
+import {getNumberImgVerIdentStreamUrl} from "../api/people.ts";
 
 
 export type Props = {

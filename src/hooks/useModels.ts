@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchModels, selectModel, type Model } from "../api/modelApi";
+import { fetchModels, selectModel, type Model } from "../api/model.ts";
 import { useQuery, useMutation } from "@tanstack/react-query";
 
 
