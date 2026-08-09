@@ -33,7 +33,7 @@ interface SuccessResponse{
 
 export async function selectModel(model:string){
     const response = await backendApi.post<SuccessResponse>(
-        "/model/    selectModel",
+        "/model/selectModel",
         {
             model_name:model
         }

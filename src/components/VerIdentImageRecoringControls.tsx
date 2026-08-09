@@ -24,7 +24,7 @@ export function VerIdentImageRecordingControls() {
 
     const buttonProps: ButtonProp[] = [
         {
-            text: "Start Recording Pos",
+            text: "Start Recording",
             func:  startRecordingVerIdent
 
         }
