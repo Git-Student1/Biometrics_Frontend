@@ -1,8 +1,8 @@
 import './App.css'
-import ModelList from "./components/ModelsList"
-import { VerIdent } from "./components/VerIdent"
-import {PosImageRecording} from "./components/PosImageRecording.tsx";
-import {ModelTraining} from "./components/ModelTraining.tsx";
+import ModelList from "./components/model/ModelsList.tsx"
+import { VerIdent } from "./components/predictions/VerIdent.tsx"
+import {PosImageRecording} from "./components/trainingImgRecording/PosImageRecording.tsx";
+import {ModelTraining} from "./components/model/ModelTraining.tsx";
 import {useState} from "react";
 import styles from "./Styles/Styles.module.css";
 

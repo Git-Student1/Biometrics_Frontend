@@ -1,6 +1,6 @@
-import { useModels } from "../hooks/useModels";
-import ListGroup from "./ListGroup";
-import { selectModel } from "../api/model.ts"
+import { useModels } from "../../hooks/useModels.ts";
+import ListGroup from "../commons/ListGroup.tsx";
+import { selectModel } from "../../api/model.ts"
 
 
 

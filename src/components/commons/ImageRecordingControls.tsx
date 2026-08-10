@@ -1,8 +1,9 @@
 import {useEffect, useState} from "react";
 import {type ButtonProp, PersonSelection} from "./PersonSelection.tsx"
-import styles from "../Styles/Styles.module.css"
-import {getErrorMessage} from "../helpers/Errors.ts";
-import {getCameraRecordingStatus, stopRecording} from "../api/camera.ts";
+import styles from "../../Styles/Styles.module.css"
+import {getErrorMessage} from "../../helpers/Errors.ts";
+import {stopRecording} from "../../api/camera.ts";
+import {checkIsRecording} from "../../helpers/CameraHelper.ts";
 
 
 export type Props = {
@@ -40,28 +41,12 @@ export function ImageRecordingControls({buttonProps, setRecordingPerson, setIsSh
 
 
 
-    const checkIsRecording = async () =>{
-        setIsProcessing(true);
-        try{
-            const response = await getCameraRecordingStatus();
-
-            if (response.recording!== undefined && typeof (response.recording)==="boolean")
-                setIsRecording(response.recording);
-        } catch (error) {
-            setErrorMessage(getErrorMessage(error, "Camera action failed"));
-        } finally {
-            setIsProcessing(false);
-        }
-    }
-
-
-
     const startImageRecording = async (person:string, apiFunc:(person:string)=>Promise<void>) => {
         setDoShowPeopleSelection(false);
         setIsProcessing(true);
         try {
             await apiFunc(person);
-            await checkIsRecording()
+            setIsRecording(await checkIsRecording())
         } catch (error) {
             setErrorMessage(getErrorMessage(error, "Camera action failed"));
         } finally {
@@ -80,7 +65,7 @@ export function ImageRecordingControls({buttonProps, setRecordingPerson, setIsSh
         await stopRecording()
         setIsShowImageCount(false);
         setRecordingPerson("")
-        void checkIsRecording()
+        setIsRecording(await checkIsRecording())
 
     }
 

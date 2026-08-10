@@ -1,5 +1,5 @@
 import { useState } from "react";
-import {CameraInteraction} from "./CameraInteraction.tsx";
+import {CameraInteraction} from "../commons/CameraInteraction.tsx";
 import {VerIdentControls} from "./VerIdentControls.tsx";
 
 export function VerIdent() {

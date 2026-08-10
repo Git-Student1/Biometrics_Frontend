@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState} from "react";
 import axios from "axios";
-import styles from "../Styles/Styles.module.css";
+import styles from "../../Styles/Styles.module.css";
 import {AddPerson} from "./AddPerson.tsx";
 
 

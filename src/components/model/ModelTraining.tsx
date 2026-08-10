@@ -1,8 +1,8 @@
-import { type StringStreamOptions, useStartableStringStream } from "../helpers/Streams.ts";
-import { getModelTrainingMessagesStream, startModelTraining, stopModelTraining} from "../api/model.ts";
+import { type StringStreamOptions, useStartableStringStream } from "../../helpers/Streams.ts";
+import { getModelTrainingMessagesStream, startModelTraining, stopModelTraining} from "../../api/model.ts";
 import { useState } from "react";
-import { getErrorMessage } from "../helpers/Errors.ts";
-import styles from "../Styles/Styles.module.css";
+import { getErrorMessage } from "../../helpers/Errors.ts";
+import styles from "../../Styles/Styles.module.css";
 
 
 export function ModelTraining(){

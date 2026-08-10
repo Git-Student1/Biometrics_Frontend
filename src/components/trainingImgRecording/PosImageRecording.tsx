@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CameraInteraction } from "./CameraInteraction.tsx";
+import { CameraInteraction } from "../commons/CameraInteraction.tsx";
 import { PosImageRecordingControls } from "./PosImageRecordingControls.tsx";
 
 export function PosImageRecording() {

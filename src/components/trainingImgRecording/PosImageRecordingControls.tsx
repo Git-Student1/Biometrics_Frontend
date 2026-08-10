@@ -1,12 +1,12 @@
 import {useState} from "react";
 
-import {type ButtonProp} from "./PersonSelection.tsx"
-import {type NumberStreamOptions, useNumberStream} from "../helpers/Streams.ts";
-import styles from "../Styles/Styles.module.css"
-import {ImageRecordingControls} from "./ImageRecordingControls.tsx";
-import {startRecordingAnc, startRecordingPos} from "../api/camera.ts";
+import {type ButtonProp} from "../commons/PersonSelection.tsx"
+import {type NumberStreamOptions, useNumberStream} from "../../helpers/Streams.ts";
+import styles from "../../Styles/Styles.module.css"
+import {ImageRecordingControls} from "../commons/ImageRecordingControls.tsx";
+import {startRecordingAnc, startRecordingPos} from "../../api/camera.ts";
 
-import {addTrainingPerson, fetchTrainingPeople, getNumberAncStreamUrl, getNumberPosStreamUrl} from "../api/people.ts";
+import {addTrainingPerson, fetchTrainingPeople, getNumberAncStreamUrl, getNumberPosStreamUrl} from "../../api/people.ts";
 
 export function PosImageRecordingControls() {
     const [errorMessage,  setErrorMessage] = useState("");

@@ -1,5 +1,5 @@
 import {useRef} from "react";
-import styles from "../Styles/Styles.module.css"
+import styles from "../../Styles/Styles.module.css"
 
 
 export type Props = {

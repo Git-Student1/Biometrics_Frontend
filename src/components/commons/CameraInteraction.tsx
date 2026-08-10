@@ -2,8 +2,8 @@ import {type ReactNode, useEffect, useState} from "react";
 
 
 import axios from "axios";
-import styles from "../Styles/Styles.module.css"
-import {getCameraStatus, getCameraStreamUrl} from "../api/camera.ts";
+import styles from "../../Styles/Styles.module.css"
+import {getCameraStatus, getCameraStreamUrl} from "../../api/camera.ts";
 
 
 type Props  = {
