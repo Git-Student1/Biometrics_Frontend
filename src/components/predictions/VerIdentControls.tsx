@@ -18,10 +18,7 @@ type PredictionMenuState =
 
 export function VerIdentControls({setMessage}:Props) {
     const [isProcessing, setIsProcessing] = useState(false);
-    const [isShowPeopleSelection, setIsShowPeopleSelection] = useState(false);
-    const [isAddingNewPerson, setIsAddingNewPerson] = useState(false);
     const [predictionMenuState, setPredictionMenuState] = useState<PredictionMenuState>("baseMenu")
-
 
 
 
@@ -34,10 +31,8 @@ export function VerIdentControls({setMessage}:Props) {
     }
 
 
-
     return (
         <>
-            {!isAddingNewPerson && (
                 <div>
                     {( predictionMenuState === "baseMenu"
                     || predictionMenuState === "baseMenu-VerPersonSelection") && (
@@ -46,7 +41,7 @@ export function VerIdentControls({setMessage}:Props) {
                             setIsProcessing={setIsProcessing}
                             onVerify={showVerificationSelection}
                             onAddNewPerson={showAddNewPeopleDialog}
-                            disableButtons={predictionMenuState!=="baseMenu"}
+                            disableButtons={predictionMenuState!=="baseMenu"||isProcessing}
                         />
                     )}
 
@@ -74,8 +69,7 @@ export function VerIdentControls({setMessage}:Props) {
                         </div>
                     )}
 
-                </div>)}
-
+                </div>
         </>)
 
 }

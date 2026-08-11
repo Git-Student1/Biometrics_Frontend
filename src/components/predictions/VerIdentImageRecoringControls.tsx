@@ -37,8 +37,6 @@ export function VerIdentImageRecordingControls() {
             />
             { isShowImageCount &&(<VerIdentImageCount recordingPerson={recordingPerson}/>)}
 
-
-
         </>
     );
 

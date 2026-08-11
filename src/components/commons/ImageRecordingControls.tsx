@@ -66,7 +66,6 @@ export function ImageRecordingControls({buttonProps, setRecordingPerson, setIsSh
         setIsShowImageCount(false);
         setRecordingPerson("")
         setIsRecording(await checkIsRecording())
-
     }
 
     return (

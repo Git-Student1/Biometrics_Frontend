@@ -1,6 +1,11 @@
 import { type StringStreamOptions, useStartableStringStream } from "../../helpers/Streams.ts";
-import { getModelTrainingMessagesStream, startModelTraining, stopModelTraining} from "../../api/model.ts";
-import { useState } from "react";
+import {
+    fetchTrainingStatus,
+    getModelTrainingMessagesStream,
+    startModelTraining,
+    stopModelTraining
+} from "../../api/model.ts";
+import {useEffect, useState} from "react";
 import { getErrorMessage } from "../../helpers/Errors.ts";
 import styles from "../../Styles/Styles.module.css";
 
@@ -9,6 +14,49 @@ export function ModelTraining(){
     const [trainingMessage, setTrainingMessage] = useState('');
     const [isTraining, setIsTraining] = useState(false);
     const [errorText, setErrorText] = useState<string>("");
+
+
+
+
+
+    const waitUntilTrainingStopped = async () => {
+        while (true) {
+            const response = await fetchTrainingStatus();
+
+            if (response.isTraining) {
+                setIsTraining(true);
+            } else {
+                setIsTraining(false);
+            }
+
+            if (!response.isAborting) {
+                break;
+            }
+
+            await new Promise((resolve) => setTimeout(resolve, 500));
+        }
+    }
+
+
+    const updateTrainingStatus  = async () =>{
+        setErrorText("")
+        try {
+            const response = await fetchTrainingStatus();
+
+            setIsTraining(response.isTraining);
+            if (response.isTraining)
+                startMessageStream()
+
+            if (response.isAborting)
+                await waitUntilTrainingStopped();
+
+        } catch (error) {
+            const error_string = getErrorMessage(error, "Failed to start training")
+            setErrorText(error_string)
+            console.error(error_string);
+        }
+    }
+
 
 
 
@@ -23,8 +71,11 @@ export function ModelTraining(){
 
         } catch (error) {
             const error_string = getErrorMessage(error, "Failed to start training")
+
             setErrorText(error_string)
             console.error(error_string);
+
+            await updateTrainingStatus()
         }
     }
 
@@ -43,13 +94,24 @@ export function ModelTraining(){
     const streamProps: StringStreamOptions = {
         url: getModelTrainingMessagesStream(),
         onValue: (text:string)=>setTrainingMessage(text),
-        onError:(error:Event)=>console.error(error)
+        onError:(error:Event)=>console.error(error),
+        onCompleted: ()=>setIsTraining(false)
     };
 
+
     const {
-        startMessageStream
+        startMessageStream,
+        isActive
     } = useStartableStringStream(streamProps)
 
+
+    useEffect(() => {
+        void updateTrainingStatus()
+    }, []);
+
+    useEffect(() => {
+        console.log("isactive", isActive)
+        },[isActive])
 
 
 

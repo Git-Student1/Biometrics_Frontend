@@ -55,3 +55,13 @@ export async function stopModelTraining(){
     return response.data
 }
 
+type TrainingStatus = {
+    isTraining : boolean
+    isAborting : boolean
+}
+
+export async function fetchTrainingStatus() {
+    const response = await backendApi.get<TrainingStatus>("/model/training/status")
+    return response.data;
+}
+

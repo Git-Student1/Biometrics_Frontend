@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useRef, useState} from "react";
+import { useEffect, useRef, useState} from "react";
 
 export type NumberStreamOptions = {
     url: string | null;
@@ -40,6 +40,7 @@ export type StringStreamOptions = {
     url: string;
     onValue: (value: string) => void;
     onError?: (error: Event) => void;
+    onCompleted: () => void;
 };
 
 type StartableStream = {
@@ -52,18 +53,25 @@ export function useStartableStringStream({
                                              url,
                                              onValue,
                                              onError,
+                                             onCompleted
                                          }: StringStreamOptions): StartableStream {
     const eventSourceRef = useRef<EventSource | null>(null);
     const [isActive, setIsActive] = useState(false);
 
-    const stop = useCallback(() => {
+
+    useEffect(()=>{
+        if (eventSourceRef.current)
+            setIsActive(true)
+        else
+            setIsActive(false)
+    },[eventSourceRef.current])
+
+    const stop = () => {
         eventSourceRef.current?.close();
         eventSourceRef.current = null;
-        setIsActive(false);
-    }, []);
+    }
 
     const start = () => {
-        setIsActive(true);
         // Prevent multiple simultaneous connections
         if (eventSourceRef.current) {
             return;
@@ -76,22 +84,28 @@ export function useStartableStringStream({
 
         eventSource.onmessage = (event: MessageEvent<string>) => {
             console.log(event.data)
-            onValue(event.data);
-            if(event.data==="done")
-                eventSource.close();
+            if(event.data==="done") {
+                console.log("done")
+                onCompleted()
+                stop()
+            }
+            else
+                onValue(event.data);
         };
 
         eventSource.onerror = (error) => {
             onError?.(error);
+
+            stop()
         };
     }
 
-    // Close the connection if the component is unmounted
     useEffect(() => {
-        return () => {
+        return ()=>{
             stop()
-        };
+        }
     }, []);
+
 
     return {
         startMessageStream:start,
