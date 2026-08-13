@@ -7,18 +7,17 @@ import {checkIsRecording} from "../../helpers/CameraHelper.ts";
 
 
 export type Props = {
-    setRecordingPerson:  React.Dispatch<React.SetStateAction<string>>
-    setIsShowImageCount: React.Dispatch<React.SetStateAction<boolean>>
-    buttonProps: ButtonProp[]
-    errorMessage: string
-    setErrorMessage: React.Dispatch<React.SetStateAction<string>>
+    onPersonSelected: (person:string) => void;
+    onRecordingStopped: () => void;
+    personConfirmButtonProps: ButtonProp[]
     fetchPeopleFn:()=>Promise<string[]>
     addPeopleFn:(person:string)=>Promise<void>
     selectButtonBeforeSelection: boolean
 }
 
 
-export function ImageRecordingControls({buttonProps, setRecordingPerson, setIsShowImageCount, errorMessage, setErrorMessage, fetchPeopleFn, addPeopleFn, selectButtonBeforeSelection}: Props) {
+export function ImageRecordingControls({onPersonSelected, onRecordingStopped, personConfirmButtonProps: personConfirmButtonProps, fetchPeopleFn, addPeopleFn, selectButtonBeforeSelection}: Props) {
+    const [errorMessage, setErrorMessage] = useState<string>("");
     const [isProcessing, setIsProcessing] = useState(false);
     const [isRecording, setIsRecording] = useState<boolean>(false);
 
@@ -35,7 +34,7 @@ export function ImageRecordingControls({buttonProps, setRecordingPerson, setIsSh
 
     useEffect(()=> {
       return ()=>{
-          void stopRecording();
+          void stopImageRecording();
       }
     }, [])
 
@@ -55,7 +54,7 @@ export function ImageRecordingControls({buttonProps, setRecordingPerson, setIsSh
     };
 
 
-    buttonProps = buttonProps.map((prop) => {return {
+    personConfirmButtonProps = personConfirmButtonProps.map((prop) => {return {
         text:prop.text,
         func:(person:string) =>   startImageRecording(person, prop.func)
     }})
@@ -63,10 +62,16 @@ export function ImageRecordingControls({buttonProps, setRecordingPerson, setIsSh
 
     const stopImageRecording =  async () =>{
         await stopRecording()
-        setIsShowImageCount(false);
-        setRecordingPerson("")
-        setIsRecording(await checkIsRecording())
+
+        const isRecording = await checkIsRecording()
+        setIsRecording(isRecording)
+        if (!isRecording)
+            onRecordingStopped()
+
+
     }
+
+
 
     return (
         <>
@@ -94,16 +99,8 @@ export function ImageRecordingControls({buttonProps, setRecordingPerson, setIsSh
 
             { doShowPeopleSelection && (
                 <PersonSelection
-                    onPersonSelect={ (person:string)=>{
-                        try {
-                            setRecordingPerson(person)
-                            setIsShowImageCount(true)
-                        }
-                        catch (error) {
-                            console.error(error);
-                        }
-                    }}
-                    buttonProps={buttonProps}
+                    onPersonSelect={onPersonSelected}
+                    buttonProps={personConfirmButtonProps}
                     onClose={selectButtonBeforeSelection?()=>setDoShowPeopleSelection(false):undefined}
                     addNewPerson={addPeopleFn}
                     fetchPeopleFn={fetchPeopleFn}

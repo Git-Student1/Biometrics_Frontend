@@ -62,3 +62,34 @@ h2{
     margin: 8px;
     padding: 10px;
 }
+
+.sectionSummary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    list-style: none;
+}
+
+.sectionSummary::-webkit-details-marker {
+    display: none;
+}
+
+.sectionSummary h2 {
+    margin: 0;
+}
+
+.arrow {
+    font-size: 0.8rem;
+}
+
+details:not([open]) .arrow {
+    transform: rotate(-90deg);
+}
+
+.camera-image {
+    display: block;
+    objectFit: cover;
+    margin: 0 auto 16px;
+    padding: 10px
+}

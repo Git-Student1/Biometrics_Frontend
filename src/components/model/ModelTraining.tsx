@@ -45,6 +45,7 @@ export function ModelTraining(){
 
             setIsTraining(response.isTraining);
             if (response.isTraining)
+                setTrainingMessage("Waiting for next Status update.")
                 startMessageStream()
 
             if (response.isAborting)

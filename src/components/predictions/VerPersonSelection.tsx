@@ -44,7 +44,7 @@ export function VerPersonSelection({setMessage, onEndVerify, onStartVerify, onCl
                 <PersonSelection
                     fetchPeopleFn={fetchPeopleQualifyingForVerification}
                     onPersonSelect={setSelectedPerson}
-                    buttonProps = {buttonProps}
+                    buttonProps= {buttonProps}
                     onClose={onClose}
 
                 />

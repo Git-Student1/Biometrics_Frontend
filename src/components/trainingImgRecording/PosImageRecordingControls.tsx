@@ -9,7 +9,6 @@ import {startRecordingAnc, startRecordingPos} from "../../api/camera.ts";
 import {addTrainingPerson, fetchTrainingPeople, getNumberAncStreamUrl, getNumberPosStreamUrl} from "../../api/people.ts";
 
 export function PosImageRecordingControls() {
-    const [errorMessage,  setErrorMessage] = useState("");
     const [imgNumberPos, setImgNumberPos] = useState<number>(0);
     const [imgNumberAnc, setImgNumberAnc] = useState<number>(0);
 
@@ -21,19 +20,11 @@ export function PosImageRecordingControls() {
     const posStreamOptions:NumberStreamOptions = {
         url: recordingPerson? getNumberPosStreamUrl(recordingPerson):null,
         onValue: (count: number)=> setImgNumberPos(count),
-        onError: () => {
-            console.error("Recording status stream failed.")
-            setErrorMessage("Recording status stream failed.");
-        }
     }
 
     const ancStreamOptions:NumberStreamOptions = {
         url: recordingPerson?  getNumberAncStreamUrl(recordingPerson): null,
         onValue: (count: number)=> setImgNumberAnc(count),
-        onError: () => {
-            console.error("Recording status stream failed.")
-            setErrorMessage("Recording status stream failed.");
-        }
     }
 
     useNumberStream(posStreamOptions)
@@ -56,16 +47,14 @@ export function PosImageRecordingControls() {
     return (
         <>
           <ImageRecordingControls
-              setRecordingPerson={setRecordingPerson}
-              setIsShowImageCount={setIsShowImageCount}
-              buttonProps={buttonProps}
-              errorMessage={errorMessage}
-              setErrorMessage={setErrorMessage}
+              onPersonSelected={setRecordingPerson}
+              onRecordingStopped={()=>setRecordingPerson("")}
+              personConfirmButtonProps={buttonProps}
               fetchPeopleFn={fetchTrainingPeople}
               addPeopleFn={addTrainingPerson}
               selectButtonBeforeSelection={true}
           />
-            {isShowImageCount && (
+            {recordingPerson && (
                 <p className={`${styles.text} ${styles.info}`}>
                     Current images for person "{recordingPerson}": pos {imgNumberPos}, anc {imgNumberAnc}
                 </p>)

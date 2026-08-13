@@ -16,20 +16,36 @@ function App() {
             <div className="setup-view">
                 <h1>Choices: Train a new model or load a model</h1>
 
-                <section className={"model-section"} >
-                    <h2>Train a model</h2>
-                    <h3 className={styles.noBottomSpace}>1. Add positive/anchor images</h3>
-                    <p className={`${styles.text} ${styles.hint} ${styles.subtitle} `}>(can be skipped if there are already sufficient images)</p>
-                    <PosImageRecording />
-                    <h3>2. Start model training</h3>
-                    <ModelTraining />
-                </section >
-                <section className={"model-section"}>
-                    <h2>Load a model</h2>
+                <details className={"model-section"} >
+                    <summary className={styles.sectionSummary}>
+                        <h2>Train a model</h2>
+                        <span className={styles.arrow}>▼</span>
+                    </summary>
+
+                       <h3 className={styles.noBottomSpace}>1. Add positive/anchor images</h3>
+                       <p className={`${styles.text} ${styles.hint} ${styles.subtitle} `}>(can be skipped if there are already sufficient images)</p>
+
+                       <PosImageRecording />
+                    <div
+                        style={{
+                            borderBottom: "1px solid #ccc",
+                            padding: "10px",
+                        }}
+                    >
+                    </div>
+                        <h3>2. Start model training</h3>
+                        <ModelTraining />
+
+                </details>
+                <details className={"model-section"}>
+                    <summary className={styles.sectionSummary}>
+                        <h2>Load a model</h2>
+                        <span className={styles.arrow}>▼</span>
+                    </summary>
                     <ModelList
                         onModelLoaded={setLoadedModel}
                     />
-                </section>
+                </details>
             </div>
         );
     }

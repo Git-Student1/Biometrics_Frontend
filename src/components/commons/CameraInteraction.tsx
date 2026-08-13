@@ -48,17 +48,14 @@ export function CameraInteraction({children, message, setMessage}:Props) {
     }, [setMessage]);
 
     return (
-        <section className={styles.cameraInteraction}>
+        <div className={styles.cameraInteraction}>
+            <div>
             {(streamReady && <img
                 src={getCameraStreamUrl()}
                 alt="Live camera"
                 width={250}
                 height={250}
-                style={{
-                    display: "block",
-                    objectFit: "cover",
-                    marginBottom: 16,
-                }}
+
                 onLoad={() => {
                     console.log("Camera stream loaded");
                 }}
@@ -72,13 +69,15 @@ export function CameraInteraction({children, message, setMessage}:Props) {
                     );
                     setMessage("Camera stream could not be loaded");
                 }}
-                className={"camera-stream"}
+                className={styles.cameraImage}
                 />)}
+            </div>
 
-            { streamReady && children}
+            <div>
+                { streamReady && children}
 
-            {message && <p>{message}</p>}
-
-        </section>
+                {message && <p>{message}</p>}
+            </div>
+        </div>
     );
 }
