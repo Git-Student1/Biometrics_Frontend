@@ -13,7 +13,6 @@ export function PosImageRecordingControls() {
     const [imgNumberAnc, setImgNumberAnc] = useState<number>(0);
 
     const [recordingPerson, setRecordingPerson] = useState<string>("")
-    const [isShowImageCount, setIsShowImageCount] = useState<boolean>(false);
 
 
 
