@@ -137,7 +137,7 @@ export function ModelTraining(){
                     Stop Training
                 </button>
             </div>
-            <p className={`${styles.text} ${styles.info}`}>{trainingMessage}</p>
+            <p className={`${styles.text} ${styles.dynamic_info}`}>{trainingMessage}</p>
             <p className={`${styles.text} ${styles.error}`}>{errorText}</p>
         </>
     )

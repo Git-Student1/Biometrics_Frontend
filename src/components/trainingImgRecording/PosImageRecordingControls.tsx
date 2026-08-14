@@ -54,7 +54,7 @@ export function PosImageRecordingControls() {
               selectButtonBeforeSelection={true}
           />
             {recordingPerson && (
-                <p className={`${styles.text} ${styles.info}`}>
+                <p className={`${styles.text} ${styles.dynamic_info}`}>
                     Current images for person "{recordingPerson}": pos {imgNumberPos}, anc {imgNumberAnc}
                 </p>)
             }

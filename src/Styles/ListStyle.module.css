@@ -1,3 +1,14 @@
+.list_group {
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(150px, 1fr));
+    gap: 4px;
+
+    list-style: none;
+    padding: 0;
+
+}
+
 .list_group_item {
     list-style-type: none;
 
@@ -10,33 +21,29 @@
     min-width: 0;
     min-height: 40px;
 
-    border-radius: 3px;
+    border-radius: 10px;
     padding: 10px 15px;
     cursor: pointer;
-    background-color:  #08060d;
+    /* background-color:  #4b4b4b;*/
+
     margin: 2px;
+    --bg1: #4b4b4b;
+    --bg2: #417f41;
+    background-image: linear-gradient(to bottom right , var(--bg1),var(--bg2));
+    color: white;
+    box-shadow: #111111 2px 2px 3px;
 
 
     &:hover{
-        background-color: white;
-
+        --bg2: darkblue;
     }
     &.active {
-        background-color: #aa3bff;
+        background-color: green;
     }
 
 }
 
-.list_group {
-    margin-top: 10px;
-    display: grid;
-    grid-template-columns: repeat(5, minmax(150px, 1fr));
-    gap: 4px;
 
-    list-style: none;
-    padding: 0;
-
-}
 
 @media (max-width: 1000px) {
     .list_group {

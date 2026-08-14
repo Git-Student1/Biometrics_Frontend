@@ -17,8 +17,8 @@ function App() {
                 <h1>Choices: Train a new model or load a model</h1>
 
                 <details className={"model-section"} >
-                    <summary className={styles.sectionSummary}>
-                        <h2>Train a model</h2>
+                    <summary className={`${styles.sectionSummary} `} >
+                        <h2>Train new model</h2>
                         <span className={styles.arrow}>▼</span>
                     </summary>
 
@@ -27,10 +27,7 @@ function App() {
 
                        <PosImageRecording />
                     <div
-                        style={{
-                            borderBottom: "1px solid #ccc",
-                            padding: "10px",
-                        }}
+                        className={styles.dividing_line}
                     >
                     </div>
                         <h3>2. Start model training</h3>
@@ -39,7 +36,7 @@ function App() {
                 </details>
                 <details className={"model-section"}>
                     <summary className={styles.sectionSummary}>
-                        <h2>Load a model</h2>
+                        <h2>Load existing model</h2>
                         <span className={styles.arrow}>▼</span>
                     </summary>
                     <ModelList

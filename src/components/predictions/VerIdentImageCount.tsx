@@ -25,7 +25,7 @@ export function VerIdentImageCount({recordingPerson}: Props) {
     useNumberStream(streamOptions)
 
     return (
-            <p className={`${styles.text} ${styles.info}`}>
+            <p className={`${styles.text} ${styles.dynamic_info}`}>
                 Current images for person "{recordingPerson}": {imgNumber}
             </p>)
 
