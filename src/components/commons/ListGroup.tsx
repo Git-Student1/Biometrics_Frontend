@@ -1,4 +1,5 @@
 import { useState } from "react"
+import styles from "../../Styles/ListStyle.module.css"
 
 interface Props{
     title:string,
@@ -10,22 +11,23 @@ interface Props{
 
 
 const ListGroup = ({title, items, handleClick}:Props)=>{
-    const [selectedIndex, setSelected] = useState(-1)
+    const [selectedIndex, setSelected] = useState<Number>(-1)
+    if(selectedIndex===1)
+        return
 
-    return <>
-        <h3>{title}</h3>
-        <ul className="list-group">
+    return (
+        <ul className={styles.list_group}>
             {items.map((item, index)=>(
                 <li key={item}
-                    className={selectedIndex===index? 'list-group-item active':'list-group-item'}
+                    className={  selectedIndex===index ? `${styles.list_group_item} ${styles.active}`:`${styles.list_group_item}`}
                     onClick={()=>{
                         setSelected(index)
                         handleClick(item)
                     }
                 }>{item}</li>
             ))}
-        </ul>
-    </>
+        </ul>)
+
 }
 
 export default ListGroup

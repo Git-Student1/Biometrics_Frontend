@@ -1,6 +1,7 @@
 import { useModels } from "../../hooks/useModels.ts";
 import ListGroup from "../commons/ListGroup.tsx";
 import { selectModel } from "../../api/model.ts"
+import {useCallback} from "react";
 
 
 
@@ -10,19 +11,18 @@ export type Props = {
 
 export default function ModelsList( {onModelLoaded}: Props ) {
     const { models, isLoading, error } = useModels();
-    const handleModelSelection = (model:string) => {
+    const handleModelSelection = useCallback((model:string) => {
         try {
             selectModel(model).then(
                 ()=>onModelLoaded(model)
-            ).catch(
-                //popup that it failed
             )
             console.log(model)
         } catch(e) {
+
             console.log(e)
         }
 
-    }
+    },[])
 
     if (isLoading) {
         return <p>Loading models...</p>;

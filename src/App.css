@@ -50,9 +50,6 @@
   flex-direction: column;
   align-items: center;
   box-shadow: 2px 5px 8px;
-
-  &:hover {
-    opacity: 0.8;
-  }
+  
 }
 
