@@ -21,17 +21,16 @@ function App() {
                         <h2>Train new model</h2>
                         <span className={styles.arrow}>▼</span>
                     </summary>
+                    <div className={styles.model_training}>
+                           <h3 className={styles.noBottomSpace}>1. Add positive/anchor images</h3>
+                           <p className={`${styles.text} ${styles.hint} ${styles.subtitle} `}>(can be skipped if there are already sufficient images)</p>
 
-                       <h3 className={styles.noBottomSpace}>1. Add positive/anchor images</h3>
-                       <p className={`${styles.text} ${styles.hint} ${styles.subtitle} `}>(can be skipped if there are already sufficient images)</p>
-
-                       <PosImageRecording />
-                    <div
-                        className={styles.dividing_line}
-                    >
-                    </div>
+                            <PosImageRecording />
+                        </div>
+                    <div className={styles.model_training}>
                         <h3>2. Start model training</h3>
                         <ModelTraining />
+                    </div>
 
                 </details>
                 <details className={"model-section"}>

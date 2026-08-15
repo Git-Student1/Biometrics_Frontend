@@ -37,10 +37,12 @@ h2{
         --bg1: #4b4b4b;
         --bg2: #417f41;
         background-image: linear-gradient(to bottom right , var(--bg1),var(--bg2));
-
     }
 
     &.secondary {
+        --bg1: maroon;
+        --bg2: maroon;
+        background-image: linear-gradient(to bottom right , var(--bg1),var(--bg2));
         background-color: maroon;
         color: white;
     }
@@ -50,6 +52,7 @@ h2{
     }
 
     &:hover {
+        --bg2: #4141ff;
         opacity: 0.7;
     }
     &:disabled {
@@ -73,7 +76,6 @@ h2{
 }
 
 .sectionSummary {
-    background-color: #212f21;
     border-radius: 10px;
     width:  100%;
     display: flex;
@@ -114,4 +116,14 @@ details:not([open]) .arrow {
     width:  100%;
     border-bottom: 1px solid #ccc;
     padding: 10px;
+}
+
+.model_training {
+    border-radius: 15px;
+    padding: 1px 200px 8px 200px;
+    margin: 20px;
+    --bg1: #1b1b1b;
+    --bg2: #414741;
+    background-image:  linear-gradient(to bottom right , var(--bg2),var(--bg1));
+    box-shadow: #111111 3px 3px 5px;
 }

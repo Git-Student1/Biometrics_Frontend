@@ -28,7 +28,7 @@
 
     margin: 2px;
     --bg1: #4b4b4b;
-    --bg2: #417f41;
+    --bg2: #215821;
     background-image: linear-gradient(to bottom right , var(--bg1),var(--bg2));
     color: white;
     box-shadow: #111111 2px 2px 3px;
