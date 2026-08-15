@@ -58,17 +58,29 @@ export function useStartableStringStream({
     const eventSourceRef = useRef<EventSource | null>(null);
     const [isActive, setIsActive] = useState(false);
 
+    const onValueRef = useRef(onValue);
+    const onErrorRef = useRef(onError);
+    const onCompletedRef = useRef(onCompleted);
 
-    useEffect(()=>{
-        if (eventSourceRef.current)
-            setIsActive(true)
-        else
-            setIsActive(false)
-    },[eventSourceRef.current])
+
+    useEffect(() => {
+        onValueRef.current = onValue;
+    }, [onValue]);
+
+    useEffect(() => {
+        onErrorRef.current = onError;
+    }, [onError]);
+
+    useEffect(() => {
+        onCompletedRef.current = onCompleted;
+    }, [onCompleted]);
+
+
 
     const stop = () => {
         eventSourceRef.current?.close();
         eventSourceRef.current = null;
+        setIsActive(false);
     }
 
     const start = () => {
@@ -86,19 +98,22 @@ export function useStartableStringStream({
             console.log(event.data)
             if(event.data==="done") {
                 console.log("done")
-                onCompleted()
+                onCompletedRef.current()
                 stop()
             }
             else
-                onValue(event.data);
+                onValueRef.current(event.data);
         };
 
         eventSource.onerror = (error) => {
-            onError?.(error);
+            onErrorRef.current?.(error);
 
             stop()
         };
+        setIsActive(true);
     }
+
+
 
     useEffect(() => {
         return ()=>{

@@ -5,12 +5,13 @@ import {
     startModelTraining,
     stopModelTraining
 } from "../../api/model.ts";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import { getErrorMessage } from "../../helpers/Errors.ts";
 import styles from "../../Styles/Styles.module.css";
 
 
 export function ModelTraining(){
+    const [lockButtons, setLockButtons] = useState<boolean>(false);
     const [trainingMessage, setTrainingMessage] = useState('');
     const [isTraining, setIsTraining] = useState(false);
     const [errorText, setErrorText] = useState<string>("");
@@ -21,6 +22,7 @@ export function ModelTraining(){
 
     const waitUntilTrainingStopped = async () => {
         while (true) {
+            setLockButtons(true)
             const response = await fetchTrainingStatus();
 
             if (response.isTraining) {
@@ -30,6 +32,7 @@ export function ModelTraining(){
             }
 
             if (!response.isAborting) {
+                setLockButtons(false)
                 break;
             }
 
@@ -45,7 +48,8 @@ export function ModelTraining(){
 
             setIsTraining(response.isTraining);
             if (response.isTraining)
-                setTrainingMessage("Waiting for next Status update.")
+                if (trainingMessage==="")
+                    setTrainingMessage("Waiting for next Status update.")
                 startMessageStream()
 
             if (response.isAborting)
@@ -62,42 +66,52 @@ export function ModelTraining(){
 
 
     const startTraining = async () => {
-        setErrorText("")
+        prepareForButtonPress()
         try {
 
             const response = await startModelTraining();
             if (response.success)
                 setIsTraining(true)
             startMessageStream()
+            await updateTrainingStatus()
 
         } catch (error) {
             const error_string = getErrorMessage(error, "Failed to start training")
 
             setErrorText(error_string)
             console.error(error_string);
-
-            await updateTrainingStatus()
         }
+
+    }
+
+    const prepareForButtonPress = () => {
+        setTrainingMessage("")
+        setErrorText("")
     }
 
     const stopTraining = async () => {
-
+        prepareForButtonPress()
         try {
             const response = await stopModelTraining();
-            if (response.success)
-                setIsTraining(false)
+            if (response.success){
+                setTrainingMessage("Stopping Training...")
+                await waitUntilTrainingStopped()
+            }
             stop()
         } catch (error) {
             console.log(getErrorMessage(error, "Failed to stop training"));
         }
+        setTrainingMessage("Training stopped.")
+
     }
 
     const streamProps: StringStreamOptions = {
         url: getModelTrainingMessagesStream(),
-        onValue: (text:string)=>setTrainingMessage(text),
+        onValue: useCallback((text:string)=>{if(isTraining) setTrainingMessage(text)},[isTraining]),
         onError:(error:Event)=>console.error(error),
         onCompleted: ()=>setIsTraining(false)
     };
+
 
 
     const {
@@ -121,7 +135,7 @@ export function ModelTraining(){
             <div>
                 <button
                     type="button"
-                    disabled={isTraining}
+                    disabled={isTraining || lockButtons}
                     onClick={startTraining}
                     className={`${styles.button} ${styles.primary}`}
                 >
@@ -130,7 +144,7 @@ export function ModelTraining(){
 
                 <button
                     type="button"
-                    disabled={!isTraining}
+                    disabled={!isTraining || lockButtons}
                     onClick={stopTraining}
                     className={`${styles.button} ${styles.secondary}`}
                 >
