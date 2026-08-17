@@ -1,33 +1,25 @@
-import { useState } from "react"
 import styles from "../../Styles/ListStyle.module.css"
+import type { IdentifyPersonEval } from "../../api/camera.ts";
 
 interface Props{
-    title:string,
-    items:string[],
-    handleClick:(item:string) => void
-
+    items:IdentifyPersonEval[],
+    identifiedPerson:string
 }
 
 
 
-const ListGroup = ({title, items, handleClick}:Props)=>{
-    const [selectedIndex, setSelected] = useState<Number>(-1)
-    if(selectedIndex===1)
-        return
+const IdenResultListGroup = ({ items, identifiedPerson }:Props)=>{
+
 
     return (
         <ul className={styles.list_group}>
             {items.map((item, index)=>(
-                <li key={item}
-                    className={  selectedIndex===index ? `${styles.list_group_item} ${styles.active}`:`${styles.list_group_item}`}
-                    onClick={()=>{
-                        setSelected(index)
-                        handleClick(item)
-                    }
-                }>{item}</li>
+                <li key={item.person}
+                    className={`${styles.list_group_item}`}
+                    >{`person ${item.person} - matches: ${item.matches} `}</li>
             ))}
         </ul>)
 
 }
 
-export default ListGroup
+export default IdenResultListGroup

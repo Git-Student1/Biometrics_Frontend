@@ -1,5 +1,5 @@
 import { useModels } from "../../hooks/useModels.ts";
-import ListGroup from "../commons/ListGroup.tsx";
+import SelectableListGroup from "../commons/SelectableListGroup.tsx";
 import { selectModel } from "../../api/model.ts"
 import {useCallback} from "react";
 
@@ -37,6 +37,6 @@ export default function ModelsList( {onModelLoaded}: Props ) {
     }
 
     return (
-        <ListGroup title="Models" items={models} handleClick={handleModelSelection}></ListGroup>
+        <SelectableListGroup title="Models" items={models} handleClick={handleModelSelection}></SelectableListGroup>
     )
 }

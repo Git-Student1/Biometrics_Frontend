@@ -4,10 +4,16 @@ import {VerIdentImageRecordingControls} from "./VerIdentImageRecoringControls.ts
 
 import {VerIdentBaseMenu} from "./VerIdentBaseMenu.tsx";
 import {VerPersonSelection} from "./VerPersonSelection.tsx";
+import type {IdentifyPersonEval} from "../../api/camera.ts";
 
 
 type Props = {
-    setMessage: React.Dispatch<React.SetStateAction<string>>
+    setMessage: (text: string) => void
+    updateIdentMessages: {
+        add: (res: IdentifyPersonEval) => void
+        clear: () => void
+        setIdentifiedPerson: (person: string) => void
+    }
 }
 
 type PredictionMenuState =
@@ -16,7 +22,7 @@ type PredictionMenuState =
     "recording" |
     "addPerson"
 
-export function VerIdentControls({setMessage}:Props) {
+export function VerIdentControls({setMessage, updateIdentMessages}:Props) {
     const [isProcessing, setIsProcessing] = useState(false);
     const [predictionMenuState, setPredictionMenuState] = useState<PredictionMenuState>("baseMenu")
 
@@ -37,7 +43,7 @@ export function VerIdentControls({setMessage}:Props) {
                     {( predictionMenuState === "baseMenu"
                     || predictionMenuState === "baseMenu-VerPersonSelection") && (
                         <VerIdentBaseMenu
-                            setMessage={setMessage}
+                            updateIdentMessages={updateIdentMessages}
                             setIsProcessing={setIsProcessing}
                             onVerify={showVerificationSelection}
                             onAddNewPerson={showAddNewPeopleDialog}

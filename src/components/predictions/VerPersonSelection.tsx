@@ -7,7 +7,7 @@ import {useState} from "react";
 
 
 export type Props = {
-    setMessage: React.Dispatch<React.SetStateAction<string>>
+    setMessage: (text:string)=>void
     onStartVerify:()=>void;
     onEndVerify:()=>void;
     onClose:()=>void;
@@ -34,7 +34,9 @@ export function VerPersonSelection({setMessage, onEndVerify, onStartVerify, onCl
              return;
         }
         const response = await doVerification(selectedPersonId);
-        setMessage(`Result: ${response.result}`);
+        setMessage(`
+        Result: ${response.result}, 
+        Details: ${response.details}`);
     }
 
 

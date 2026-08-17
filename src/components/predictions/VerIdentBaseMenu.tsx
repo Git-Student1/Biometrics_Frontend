@@ -1,7 +1,13 @@
 import styles from "../../Styles/Styles.module.css";
 import {useCallback} from "react";
-import {doIdentification} from "../../api/camera.ts";
+import {
+    doIdentification,
+    getIdentificationMessageStream,
+    type IdentifyMessage,
+    type IdentifyPersonEval
+} from "../../api/camera.ts";
 import {getErrorMessage} from "../../helpers/Errors.ts";
+import {type StringStreamOptions, useStartableStringStream} from "../../helpers/Streams.ts";
 
 
 
@@ -10,27 +16,61 @@ export type Props = {
     disableButtons: boolean;
     setIsProcessing: (value: (((prevState: boolean) => boolean) | boolean)) => void
     onVerify: ()=>void
-    setMessage: React.Dispatch<React.SetStateAction<string>>
+    updateIdentMessages: {
+        add: (res: IdentifyPersonEval) => void
+        clear: () => void
+        setIdentifiedPerson: (person: string) => void
+    }
 }
 
 
-export function VerIdentBaseMenu({setMessage, disableButtons,setIsProcessing, onAddNewPerson, onVerify}:Props) {
 
 
-    const runIdentification = useCallback(async () => {
+export function VerIdentBaseMenu({updateIdentMessages, disableButtons,setIsProcessing, onAddNewPerson, onVerify}:Props) {
+
+    const streamProps: StringStreamOptions = {
+        url: getIdentificationMessageStream(),
+        onValue:(message:string)=> {
+            const identMessage: IdentifyMessage = JSON.parse(message);
+
+            if (identMessage.type === "person_eval") {
+                updateIdentMessages.add(identMessage);
+            }
+            else if (identMessage.type === "result"){
+                updateIdentMessages.setIdentifiedPerson(identMessage.person)
+            }
+            else{
+                console.error("Ident Message should have type result or person_eval but was:", identMessage.type )
+            }
+
+        },
+        onError:(error:Event)=>{
+            console.error(error)
+            setIsProcessing(false)
+        },
+        onCompleted: ()=>setIsProcessing(false)
+    };
+
+
+    const {
+        startMessageStream,
+        isActive
+    } = useStartableStringStream(streamProps)
+
+
+    const startIdentification = useCallback(async () => {
         setIsProcessing(true);
-        setMessage("");
+        updateIdentMessages.clear();
 
         try {
-            const { result, details } = await doIdentification();
-            setMessage(`result: ${result} \n details: ${details}`);
+            const { success, details } = await doIdentification();
+            startMessageStream()
+            if (success)
+                setIsProcessing(true)
         } catch (error) {
-            setMessage(getErrorMessage(error, "Camera action failed"));
-        } finally {
-            setIsProcessing(false);
+            console.error(getErrorMessage(error, "Camera action failed"));
         }
     }, []);
-
 
     return (
         <div>
@@ -45,12 +85,11 @@ export function VerIdentBaseMenu({setMessage, disableButtons,setIsProcessing, on
                 </button>
             </div>
 
-
             <div>
                 <button
                     type="button"
                     disabled={disableButtons }
-                    onClick={runIdentification}
+                    onClick={startIdentification}
                     className={`${styles.button} ${styles.primary}`}
                 >
                     Identification
@@ -64,7 +103,6 @@ export function VerIdentBaseMenu({setMessage, disableButtons,setIsProcessing, on
                 >
                     Verification
                 </button>
-
 
             </div>
         </div>

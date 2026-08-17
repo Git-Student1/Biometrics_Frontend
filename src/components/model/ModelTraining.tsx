@@ -49,7 +49,7 @@ export function ModelTraining(){
             setIsTraining(response.isTraining);
             if (response.isTraining)
                 if (trainingMessage==="")
-                    setTrainingMessage("Waiting for next Status update.")
+                    setTrainingMessage("Training already running. Waiting for next Status update.")
                 startMessageStream()
 
             if (response.isAborting)
@@ -123,10 +123,6 @@ export function ModelTraining(){
     useEffect(() => {
         void updateTrainingStatus()
     }, []);
-
-    useEffect(() => {
-        console.log("isactive", isActive)
-        },[isActive])
 
 
 

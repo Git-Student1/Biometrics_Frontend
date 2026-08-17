@@ -15,6 +15,11 @@ export async function getCameraStatus() {
     const response = await backendApi.get<CameraStatusResponse>("/camera/status")
     return response.data;
 }
+export type SuccessResponse = {
+    success:boolean
+    details:string
+}
+
 
 export type VerIdentResponse = {
     result: string
@@ -22,12 +27,37 @@ export type VerIdentResponse = {
 };
 //-------------------------------------------- identification /  verification -----------------------------------------
 //---------------------------------------------------------------------------------------------------------------------
-export async function doIdentification(): Promise<VerIdentResponse> {
-    const response = await backendApi.post<VerIdentResponse>(
+export async function doIdentification(): Promise<SuccessResponse> {
+    const response = await backendApi.post<SuccessResponse>(
         "/camera/identify",
     );
     return response.data;
 }
+
+export function getIdentificationMessageStream(): string {
+    return `${backendApi.defaults.baseURL}/camera/identify/messages`;
+}
+
+export type IdentifyPersonEval = {
+    type: "person_eval";
+    person: string;
+    matches: boolean;
+    match_ratio: number;
+    mean_similarity: number;
+    max_similarity: number;
+};
+
+export type IdentifyResult = {
+    type: "result";
+    person: string;
+};
+
+
+export type IdentifyMessage =
+    | IdentifyPersonEval
+    | IdentifyResult;
+
+
 
 export async function doVerification(person: string
 ): Promise<VerIdentResponse> {
