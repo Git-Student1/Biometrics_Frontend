@@ -48,9 +48,9 @@ export function VerIdent() {
                 setMessage={setMessage}
                 updateIdentMessages={updateIdentMessages}
             />
-            {identMessages && (<IdentResults items={identMessages} identifiedPerson={identifiedPerson}/>)}
+            {(identMessages.length!==0) && (<IdentResults items={identMessages} identifiedPerson={identifiedPerson}/>)}
             {progress.person && (<p> Person {progress.person} analyzing ... {(100*Number(progress.progress)).toFixed(3)}% </p>)}
-
+            {identifiedPerson && (<p> Identified Person: {identifiedPerson}</p>)}
         </CameraInteraction>
     );
 }

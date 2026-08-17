@@ -30,10 +30,12 @@ export function VerIdentControls({setMessage, updateIdentMessages}:Props) {
 
 
     const showAddNewPeopleDialog = () => {
+        updateIdentMessages.clear()
         setPredictionMenuState("recording")
     }
 
     const showVerificationSelection = () => {
+        updateIdentMessages.clear()
         setPredictionMenuState("baseMenu-VerPersonSelection")
     }
 
