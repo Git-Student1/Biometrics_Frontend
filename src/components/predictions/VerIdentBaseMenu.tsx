@@ -16,10 +16,11 @@ export type Props = {
     disableButtons: boolean;
     setIsProcessing: (value: (((prevState: boolean) => boolean) | boolean)) => void
     onVerify: ()=>void
-    updateIdentMessages: {
+    updateIdentMessages:  {
         add: (res: IdentifyPersonEval) => void
         clear: () => void
         setIdentifiedPerson: (person: string) => void
+        updateProgress: (person: string, progress: number) => void
     }
 }
 
@@ -39,8 +40,12 @@ export function VerIdentBaseMenu({updateIdentMessages, disableButtons,setIsProce
             else if (identMessage.type === "result"){
                 updateIdentMessages.setIdentifiedPerson(identMessage.person)
             }
+            else if (identMessage.type === "person_progress"){
+                updateIdentMessages.updateProgress(identMessage.person, identMessage.analysed/identMessage.total)
+            }
             else{
                 console.error("Ident Message should have type result or person_eval but was:", identMessage.type )
+                console.error("problematic identMessage:", identMessage)
             }
 
         },

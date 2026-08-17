@@ -9,10 +9,11 @@ import type {IdentifyPersonEval} from "../../api/camera.ts";
 
 type Props = {
     setMessage: (text: string) => void
-    updateIdentMessages: {
+    updateIdentMessages:  {
         add: (res: IdentifyPersonEval) => void
         clear: () => void
         setIdentifiedPerson: (person: string) => void
+        updateProgress: (person: string, progress: number) => void
     }
 }
 

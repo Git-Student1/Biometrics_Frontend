@@ -52,10 +52,18 @@ export type IdentifyResult = {
     person: string;
 };
 
+export type IdentifyProgress = {
+    type: "person_progress";
+    person: string;
+    total: number;
+    analysed: number;
+};
+
 
 export type IdentifyMessage =
     | IdentifyPersonEval
-    | IdentifyResult;
+    | IdentifyResult
+    | IdentifyProgress;
 
 
 
