@@ -12,12 +12,12 @@ const IdentResults = ({ items, identifiedPerson }:Props)=>{
 
 
     const percentString = (number:Number)=>{
-        return `${(100*Number(number)).toFixed(0)} %`
+        return `${(100*Number(number)).toFixed(1)} %`
     }
 
 
     return (<>
-                <table>
+                <table className={styles.table}>
                     <thead>
                         <tr>
                             <td className={styles.first_cell}>Name</td>
