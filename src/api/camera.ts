@@ -38,7 +38,11 @@ export function getIdentificationMessageStream(): string {
     return `${backendApi.defaults.baseURL}/camera/identify/messages`;
 }
 
-export type IdentifyPersonEval = {
+export function getVerificationMessageStream(): string {
+    return `${backendApi.defaults.baseURL}/camera/verify/messages`;
+}
+
+export type PersonEval = {
     type: "person_eval";
     person: string;
     matches: boolean;
@@ -47,12 +51,19 @@ export type IdentifyPersonEval = {
     max_similarity: number;
 };
 
+
+
 export type IdentifyResult = {
     type: "result";
     person: string;
 };
 
-export type IdentifyProgress = {
+export type VerifyResult = {
+    type: "result";
+    isThatPerson: boolean;
+};
+
+export type PersonEvalProgress = {
     type: "person_progress";
     person: string;
     total: number;
@@ -61,15 +72,19 @@ export type IdentifyProgress = {
 
 
 export type IdentifyMessage =
-    | IdentifyPersonEval
+    | PersonEval
     | IdentifyResult
-    | IdentifyProgress;
+    | PersonEvalProgress;
 
+export type VerifyMessage =
+    | PersonEval
+    | VerifyResult
+    | PersonEvalProgress;
 
 
 export async function doVerification(person: string
-): Promise<VerIdentResponse> {
-    const response = await backendApi.post<VerIdentResponse>(
+): Promise<SuccessResponse> {
+    const response = await backendApi.post<SuccessResponse>(
         "/camera/verify",
         {
             person: person

@@ -1,21 +1,14 @@
-import {useState } from "react";
-import styles from "../../Styles/Styles.module.css";
+import { useState } from "react";
+import styles from "../../../Styles/Styles.module.css";
 import {VerIdentImageRecordingControls} from "./VerIdentImageRecoringControls.tsx";
 
 import {VerIdentBaseMenu} from "./VerIdentBaseMenu.tsx";
 import {VerPersonSelection} from "./VerPersonSelection.tsx";
-import type {IdentifyPersonEval} from "../../api/camera.ts";
+import {
+    usePredictionFunctionalityContext,
+} from "../../../hooks/ContextHooks.ts";
 
 
-type Props = {
-    setMessage: (text: string) => void
-    updateIdentMessages:  {
-        add: (res: IdentifyPersonEval) => void
-        clear: () => void
-        setIdentifiedPerson: (person: string) => void
-        updateProgress: (person: string, progress: number) => void
-    }
-}
 
 type PredictionMenuState =
     "baseMenu" |
@@ -23,19 +16,19 @@ type PredictionMenuState =
     "recording" |
     "addPerson"
 
-export function VerIdentControls({setMessage, updateIdentMessages}:Props) {
-    const [isProcessing, setIsProcessing] = useState(false);
+export function VerIdentControls() {
     const [predictionMenuState, setPredictionMenuState] = useState<PredictionMenuState>("baseMenu")
+    const predicitonFunctionality = usePredictionFunctionalityContext()
 
 
 
     const showAddNewPeopleDialog = () => {
-        updateIdentMessages.clear()
+        predicitonFunctionality.clear()
         setPredictionMenuState("recording")
     }
 
     const showVerificationSelection = () => {
-        updateIdentMessages.clear()
+        predicitonFunctionality.clear()
         setPredictionMenuState("baseMenu-VerPersonSelection")
     }
 
@@ -46,21 +39,17 @@ export function VerIdentControls({setMessage, updateIdentMessages}:Props) {
                     {( predictionMenuState === "baseMenu"
                     || predictionMenuState === "baseMenu-VerPersonSelection") && (
                         <VerIdentBaseMenu
-                            updateIdentMessages={updateIdentMessages}
-                            setIsProcessing={setIsProcessing}
                             onVerify={showVerificationSelection}
                             onAddNewPerson={showAddNewPeopleDialog}
-                            disableButtons={predictionMenuState!=="baseMenu"||isProcessing}
+                            disableButtons={predictionMenuState!=="baseMenu"}
                         />
                     )}
 
                     {predictionMenuState ==="baseMenu-VerPersonSelection" && (
                         <VerPersonSelection
-                            setMessage={setMessage}
                             onStartVerify={()=>{
                                 setPredictionMenuState("baseMenu")
-                                setIsProcessing(true); }}
-                            onEndVerify={ ()=>setIsProcessing(false)}
+                            }}
                             onClose={()=>setPredictionMenuState("baseMenu")}
                         />
                     )}
