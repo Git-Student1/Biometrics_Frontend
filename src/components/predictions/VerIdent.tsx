@@ -7,7 +7,7 @@ import type {PredictionContextType, PredictionState, UpdatePredictionMessages} f
 import {getErrorMessage} from "../../helpers/Errors.ts";
 import {useStartableStringStream} from "../../helpers/Streams.ts";
 import {identStreamProps, verifyStreamProps} from "../../helpers/Prediction/PredictionStreamProps.ts";
-
+import styles from "../../Styles/Styles.module.css";
 
 
 
@@ -175,7 +175,10 @@ export function VerIdent() {
                                 <PredictionResults items={state.personEvaluations} identifiedPerson={null}/>)}
 
                                 {state.mode ==="idle_show_verified_person" && (
-                                    <p>Person {state.isThatPerson?"was confirmed as":"is not"} {state.person} </p>
+                                    <p className={` ${styles.text} ${styles.inline}`}>
+                                        Person <p className={` ${styles.text} ${styles.inline} ${state.isThatPerson? styles.verIsPerson:styles.verIsNotPerson}`}>
+                                            {state.isThatPerson?"was confirmed as":"is not"}
+                                    </p> {state.person}</p>
                                 )}
                             </>)}
 
@@ -187,7 +190,7 @@ export function VerIdent() {
                                 {(state.mode ==="idle_show_identified_person") &&
                                     (<PredictionResults items={state.personEvaluations} identifiedPerson={state.identifiedPerson}/>)}
                                 {(state.mode ==="idle_show_identified_person")  && (
-                                    <p> Identified Person: {state.identifiedPerson}</p>
+                                    <p > Identified Person: {state.identifiedPerson}</p>
                                 )}
                             </>)}
 

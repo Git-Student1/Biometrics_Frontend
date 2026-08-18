@@ -4,7 +4,6 @@ import {
     usePredictionFunctionalityContext,
     usePredictionStateContext
 } from "../../../hooks/ContextHooks.ts";
-import {useEffect, useState} from "react";
 
 
 
