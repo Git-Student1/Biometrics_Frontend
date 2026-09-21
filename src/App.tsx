@@ -15,39 +15,74 @@ function App() {
 
     const leftRef = useRef<HTMLDivElement | null>(null);
     const rightRef = useRef<HTMLDivElement | null>(null);
+    const dividerRef = useRef<HTMLDivElement | null>(null);
 
     const [orPosition, setOrPosition] = useState(0);
+    const [orVisible, setOrVisible] = useState(true);
 
     useLayoutEffect(() => {
-        if (loadedModel !== null) return;
-
         const left = leftRef.current;
+        const right = rightRef.current;
+        const divider = dividerRef.current;
 
-        if (!left) return;
+        if (!left || !right || !divider) return;
 
         const update = () => {
-            const rect = left.getBoundingClientRect();
+            const leftRect = left.getBoundingClientRect();
+            const rightRect = right.getBoundingClientRect();
+            const dividerRect = divider.getBoundingClientRect();
 
-            const visibleHeight = Math.min(
-                rect.height,
-                window.innerHeight - rect.top
+            // Area that is:
+            // 1. inside the left box
+            // 2. inside the right box
+            // 3. visible in the viewport
+            const visibleTop = Math.max(
+                leftRect.top,
+                rightRect.top,
+                0
             );
 
-            setOrPosition(visibleHeight / 2);
+            const visibleBottom = Math.min(
+                leftRect.bottom,
+                rightRect.bottom,
+                window.innerHeight
+            );
+
+            // No part of both boxes is currently visible
+            if (visibleBottom <= visibleTop) {
+                setOrVisible(false);
+                return;
+            }
+
+            setOrVisible(true);
+
+            // Center of the currently visible common area
+            const viewportCenter =
+                (visibleTop + visibleBottom) / 2;
+
+            // Convert viewport coordinates to coordinates
+            // relative to the divider
+            const positionInsideDivider =
+                viewportCenter - dividerRect.top;
+
+            setOrPosition(positionInsideDivider);
         };
 
         update();
 
+        window.addEventListener("scroll", update, { passive: true });
         window.addEventListener("resize", update);
 
         const observer = new ResizeObserver(update);
         observer.observe(left);
+        observer.observe(right);
 
         return () => {
+            window.removeEventListener("scroll", update);
             window.removeEventListener("resize", update);
             observer.disconnect();
         };
-    }, [loadedModel]);
+    }, []);
 
 
     if (loadedModel === null) {
@@ -69,14 +104,21 @@ function App() {
                         </div>
 
                     </div>
-                    <div className={styles.divider}>
-                        <span
-                        className={styles.dividerText}
-                        style={{ top: orPosition }}
-                        >
-                            OR
-                        </span>
+
+                    <div
+                        ref={dividerRef}
+                        className={styles.divider}
+                    >
+                        {orVisible && (
+                            <span
+                                className={styles.dividerText}
+                                style={{ top: orPosition }}
+                            >
+                                OR
+                            </span>
+                        )}
                     </div>
+
                     <div ref={rightRef} className={styles.modelSection}>
                         <h2>Load existing model</h2>
                         <ModelList

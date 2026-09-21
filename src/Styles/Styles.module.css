@@ -135,7 +135,7 @@ details:not([open]) .arrow {
 
 .model_training {
     border-radius: 15px;
-    padding: 1px 200px 8px 200px;
+    padding: 1px 50px 8px 50px;
     margin: 20px;
     --bg1: #1b1b1b;
     --bg2: #414741;
