@@ -25,7 +25,7 @@ export function CameraInteraction({children, message, setMessage}:Props) {
 
                 if (!status.active) {
                     setMessage(
-                        status.error ?? "Server failed to access the camera.",
+                        status.error ?? "Camera unavailable -> . View the frontend and server logs. \n Image recording unavailable.",
                     );
                     return;
                 }
@@ -76,7 +76,7 @@ export function CameraInteraction({children, message, setMessage}:Props) {
             <div>
                 { streamReady && children}
 
-                {message && <p>{message}</p>}
+                {message && <p className={`${styles.text} ${styles.error}`}>{message}</p>}
             </div>
         </div>
     );
