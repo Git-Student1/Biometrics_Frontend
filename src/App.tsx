@@ -82,7 +82,7 @@ function App() {
             window.removeEventListener("resize", update);
             observer.disconnect();
         };
-    }, []);
+    }, [loadedModel]);
 
 
     if (loadedModel === null) {
