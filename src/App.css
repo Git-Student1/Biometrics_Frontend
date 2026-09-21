@@ -1,15 +1,1 @@
 
-.model-section {
-  border-radius: 8px;
-
-
-  padding: 1rem;
-  margin-bottom: 1rem;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  box-shadow: grey 2px 3px 6px;
-  background-color: #262626;
-  
-}

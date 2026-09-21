@@ -90,7 +90,7 @@ inline-text {
     padding: 10px;
 }
 
-.sectionSummary {
+.collapsable_section {
     border-radius: 10px;
     width:  100%;
     display: flex;
@@ -102,11 +102,11 @@ inline-text {
 
 }
 
-.sectionSummary::-webkit-details-marker {
+.collapsable_section::-webkit-details-marker {
     display: none;
 }
 
-.sectionSummary h2 {
+.collapsable_section h2 {
     margin: 0;
 }
 
@@ -141,4 +141,19 @@ details:not([open]) .arrow {
     --bg2: #414741;
     background-image:  linear-gradient(to bottom right , var(--bg2),var(--bg1));
     box-shadow: #111111 3px 3px 5px;
+}
+
+.model-section {
+    border-radius: 8px;
+
+
+    padding: 1rem;
+    margin-bottom: 1rem;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: grey 2px 3px 6px;
+    background-color: #262626;
+
 }

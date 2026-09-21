@@ -16,8 +16,8 @@ function App() {
             <div className="setup-view">
                 <h1>Choices: Train a new model or load a model</h1>
 
-                <details className={"model-section"} >
-                    <summary className={`${styles.sectionSummary} `} >
+                <details className={styles.modelSection} >
+                    <summary className={`${styles.collapsable_section} `} >
                         <h2>Train new model</h2>
                         <span className={styles.arrow}>▼</span>
                     </summary>
@@ -33,8 +33,8 @@ function App() {
                     </div>
 
                 </details>
-                <details className={"model-section"}>
-                    <summary className={styles.sectionSummary}>
+                <details className={styles.modelSection}>
+                    <summary className={styles.collapsable_section}>
                         <h2>Load existing model</h2>
                         <span className={styles.arrow}>▼</span>
                     </summary>
