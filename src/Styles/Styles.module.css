@@ -81,7 +81,7 @@ inline-text {
      /* Keeps elements on the same line */
 }
 
-.camera-interaction {
+.cameraInteraction {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -143,7 +143,7 @@ details:not([open]) .arrow {
     box-shadow: #111111 3px 3px 5px;
 }
 
-.model-section {
+.modelSection {
     border-radius: 8px;
 
 
@@ -156,4 +156,50 @@ details:not([open]) .arrow {
     box-shadow: grey 2px 3px 6px;
     background-color: #262626;
 
+}
+
+.modelSelectionChoices {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.divider {
+    position: relative;
+    align-self: stretch;
+    width: 50px;
+    flex-shrink: 0;
+}
+
+/* One continuous vertical line */
+.divider::before {
+    content: "";
+    position: absolute;
+
+    top: 0;
+    bottom: 0;
+
+    left: 50%;
+    width: 1px;
+
+    background: #aaa;
+}
+
+.dividerText {
+    position: absolute;
+
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    /* hides the line behind OR */
+    background: #141414;
+    padding: 8px 4px;
+
+    color: #aaa;
+}
+
+.centerDiv {
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
 }
