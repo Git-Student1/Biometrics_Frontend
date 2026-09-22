@@ -1,0 +1,30 @@
+.navbar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    background: #141414;
+    margin-bottom: 20px;
+    padding-right:  20px;
+    box-sizing: border-box;
+    border-radius: 0  0 20px  5px;
+    box-shadow: 3px 7px 10px 3px rgba(200,200,200,0.2);
+}
+.navbarItem {
+    color:  white;
+    padding: 12px 4px 12px 4px;
+    align-self: stretch;
+    font-size: 30px;
+    text-decoration:  none;
+    border-radius: 5px;
+    &:hover {
+        cursor: pointer;
+        background: #4141ff;
+    }
+    &[aria-current="page"] {
+        background-color: #555555;
+        text-decoration: none;
+        font-weight: bold;
+    }
+}

@@ -1,18 +1,30 @@
 import './App.css'
-import { useState } from "react";
-import {ModelAquisition} from "./pages/ModelAquisition.tsx";
-import {Prediction} from "./pages/Prediction.tsx";
+import {BrowserRouter, Link, NavLink, Route, Routes} from 'react-router-dom';
+import {FaceRecognitionProgram} from "./pages/FaceRecognitionProgram.tsx";
+import {About} from "./pages/About.tsx";
+import style from "./Styles/Navbar.module.css"
 
 
 function App() {
-    const [loadedModel, setLoadedModel] =
-        useState<string | null>(null);
 
 
-    if (loadedModel === null){
-        return <ModelAquisition setLoadedModel={setLoadedModel}/>
-    }
-    return <Prediction setLoadedModel={setLoadedModel}/>
+
+    return (
+        <BrowserRouter>
+            {/* Your app content */}
+            <nav className={style.navbar}>
+                <NavLink className={style.navbarItem} to="/">FaceRecognition</NavLink> |{" "}
+                <NavLink className={style.navbarItem} to="/about">About</NavLink> {" "}
+            </nav>
+
+
+            <Routes>
+                <Route path="/" element={<FaceRecognitionProgram/>} />
+                <Route path="/about" element={<About />} />
+            </Routes>
+        </BrowserRouter>)
+
+
 
 
 

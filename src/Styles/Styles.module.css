@@ -1,4 +1,11 @@
+{
+    box-sizing: border-box;
+}
 
+
+h1 {
+    padding-bottom: 20px;
+}
 
 h2{
     font-size:  40px;
