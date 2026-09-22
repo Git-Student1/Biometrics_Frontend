@@ -48,3 +48,7 @@ npm run dev
 - collapsable model selection
 - when doing identification or verification freeze the image (show image in backend)
 - anchor/pos images: show number of taken and total number
+
+
+# Current Look
+![img.png](img.png)

@@ -1,0 +1,26 @@
+.step {
+    color:grey;
+    padding: 2px;
+    &.selected{
+        color:white;
+        border: 1px, dotted ,green;
+    }
+    &.completed{
+        color:white;
+    }
+}
+
+.stepper {
+    display: flex;
+    align-items: center;
+
+    list-style: none;
+
+    & li:not(:last-child)::after {
+        content: "→";
+        color:white;
+        margin: 0 10px;
+    }
+
+}
+

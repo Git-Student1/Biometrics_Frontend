@@ -1,5 +1,5 @@
 import './App.css'
-import {BrowserRouter, Link, NavLink, Route, Routes} from 'react-router-dom';
+import {BrowserRouter, NavLink, Route, Routes} from 'react-router-dom';
 import {FaceRecognitionProgram} from "./pages/FaceRecognitionProgram.tsx";
 import {About} from "./pages/About.tsx";
 import style from "./Styles/Navbar.module.css"

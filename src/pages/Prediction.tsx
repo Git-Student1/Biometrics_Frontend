@@ -3,17 +3,17 @@ import {VerIdent} from "../components/predictions/VerIdent.tsx";
 
 
 type Props = {
-    setLoadedModel: (model:string)=>void
+    onGoBack: ()=>void
 }
 
-export function Prediction({setLoadedModel}: Props) {
+export function Prediction({onGoBack}: Props) {
     return (
         <div >
             <h1>Do Verification / Identification</h1>
             <div className={styles.modelSection}>
                 <button
                     type="button"
-                    onClick={() => setLoadedModel(null)}
+                    onClick={onGoBack}
                     className={`${styles.button} ${styles.secondary}`}
                 >
                     Back to model selection
