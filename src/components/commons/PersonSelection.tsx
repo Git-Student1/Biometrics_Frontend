@@ -31,15 +31,13 @@ export function PersonSelection({buttonProps, onPersonSelect, addNewPerson, onCl
     const [people, setPeople] = useState<string[]>([])
     const [isAddingNewPerson, setIsAddingNewPerson] = useState(false);
 
-    const newPersonKey = "newPerson"
+    const newPersonKey = "Add a new person"
 
     // @ts-ignore
     const loadPeople = useCallback(async () => {
         setErrorMessage("");
         try {
             const people = await fetchPeopleFn()
-            if (addNewPerson !== undefined)
-                people.push(newPersonKey)
             setPeople(people)
 
         } catch (error) {
@@ -49,7 +47,7 @@ export function PersonSelection({buttonProps, onPersonSelect, addNewPerson, onCl
 
 
     useEffect(() => {
-
+        void loadPeople()
     }, [loadPeople]);
 
     const confirmSelection = useCallback(async (onPersonConfirm:(person: string) => void) => {
@@ -101,6 +99,7 @@ export function PersonSelection({buttonProps, onPersonSelect, addNewPerson, onCl
             onPersonSelect(person)
     }
 
+
     return (
         <>
             <div style={{ display: "flex", gap: 8 }}>
@@ -111,22 +110,23 @@ export function PersonSelection({buttonProps, onPersonSelect, addNewPerson, onCl
                     <select
                         id="select-person"
                         value={selectedPersonId}
-                        onFocus={() => void loadPeople()}
+                        onFocus={async () => await loadPeople()}
                         onChange={(event) => {
                             const person = event.target.value
                             onPersenSelectionChange(person)
                             }
                         }
                     >
-                        <option value="">Select a person</option>
-                        {
+                        <option  value="">Select a person</option>
 
-                        }
+
                         {people.map((person) => (
                             <option key={person} value={person}>
                                 {person}
                             </option>
                         ))}
+                        {addNewPerson && (<option key={newPersonKey} value={newPersonKey} style={{background:"green"}}>{newPersonKey}</option>)}
+
                     </select>
 
                     {buttonProps.map((buttonProp) => (

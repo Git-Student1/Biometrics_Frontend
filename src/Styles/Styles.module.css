@@ -125,15 +125,9 @@ details:not([open]) .arrow {
     padding: 10px
 }
 
-.dividing_line {
-    display: flex;
-    align-items: center;
-    width:  100%;
-    border-bottom: 1px solid #ccc;
-    padding: 10px;
-}
 
 .model_training {
+    width: 70%;
     border-radius: 15px;
     padding: 1px 50px 8px 50px;
     margin: 20px;
