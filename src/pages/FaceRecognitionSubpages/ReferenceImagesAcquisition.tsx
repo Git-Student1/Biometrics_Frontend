@@ -13,47 +13,50 @@ export function ReferenceImagesAcquisition({onNext}: Props){
 
 
     return (
-        <div className={styles.modelSection}>
-            <div className={styles.model_training}>
-            <p>Add reference images of people you want to do identification or verification for. Then you can verify or identify someone using an image.</p>
-            <p>Note, that identification requires reference images of multiple people to make sense.</p>
-            </div>
-            <CameraInteraction message={message} setMessage={setMessage}>
+        <div>
+            <h1>Reference Image Acquisition</h1>
+            <div className={styles.modelSection}>
+                <div className={styles.model_training}>
+                <p>Add reference images of people you want to do identification or verification for. Then you can verify or identify someone using an image.</p>
+                <p>Note, that identification requires reference images of multiple people to make sense.</p>
+                </div>
+                <CameraInteraction message={message} setMessage={setMessage}>
 
-                {!showImageRecordingControls && (<div>
-                    <button
-                        type="button"
-                        onClick={()=>setShowImageRecordingControls(true)}
-                        className={`${styles.button} ${styles.primary}`}
-                    >
-                        Add new people or images
-                    </button>
-                </div>)}
-                {!showImageRecordingControls && (<div>
-                    <button
-                        type="button"
-                        onClick={onNext}
-                        className={`${styles.button} ${styles.primary}`}
-                    >
-                        → To Prediction
-                    </button>
-                </div>)}
-
-                {showImageRecordingControls  && (
-                    <div>
-                        <VerIdentImageRecordingControls/>
+                    {!showImageRecordingControls && (<div>
                         <button
                             type="button"
-                            className={`${styles.button} ${styles.secondary}`}
-                            onClick={()=> setShowImageRecordingControls(false)}
+                            onClick={()=>setShowImageRecordingControls(true)}
+                            className={`${styles.button} ${styles.primary}`}
                         >
-                            Close
+                            Add new people or images
                         </button>
-                    </div>
-                )}
+                    </div>)}
+                    {!showImageRecordingControls && (<div>
+                        <button
+                            type="button"
+                            onClick={onNext}
+                            className={`${styles.button} ${styles.primary}`}
+                        >
+                            → To Prediction
+                        </button>
+                    </div>)}
 
-            </CameraInteraction>
+                    {showImageRecordingControls  && (
+                        <div>
+                            <VerIdentImageRecordingControls/>
+                            <button
+                                type="button"
+                                className={`${styles.button} ${styles.secondary}`}
+                                onClick={()=> setShowImageRecordingControls(false)}
+                            >
+                                Close
+                            </button>
+                        </div>
+                    )}
 
+                </CameraInteraction>
+
+            </div>
         </div>
 
 
