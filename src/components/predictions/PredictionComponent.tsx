@@ -1,6 +1,6 @@
 import {createContext, useCallback, useState} from "react";
 import { CameraInteraction } from "../commons/CameraInteraction.tsx";
-import { VerIdentControls } from "./controls/VerIdentControls.tsx";
+import { PredictionControls } from "./controls/PredictionControls.tsx";
 import { PredictionResults } from "./visualisation/PredictionResults.tsx";
 import {doIdentification, doVerification, type PersonEval} from "../../api/camera.ts";
 import type {PredictionContextType, PredictionState, UpdatePredictionMessages} from "../../types/types.ts";
@@ -15,8 +15,8 @@ export const PredictionStateContext = createContext<PredictionState|null>(null);
 export const PredictionFunctionalityContext = createContext<PredictionContextType|null>(null);
 
 
-export function VerIdent() {
-    
+export function PredictionComponent() {
+
     const [message, setMessage] = useState("");
     const [state, setState] = useState<PredictionState>({
         mode: "idle_clean",
@@ -166,7 +166,7 @@ export function VerIdent() {
 
                 <CameraInteraction message={message} setMessage={setMessage}>
 
-                    <VerIdentControls />
+                    <PredictionControls />
 
                     {state.mode !=="idle_clean" &&(<>
                         {(state.mode ==="verification" || state.mode ==="idle_show_verified_person") && (

@@ -8,7 +8,6 @@ import {
 
 
 export type Props = {
-    onAddNewPerson:()=>void
     disableButtons: boolean;
     onVerify: ()=>void
 }
@@ -16,23 +15,14 @@ export type Props = {
 
 
 
-export function VerIdentBaseMenu({ disableButtons, onAddNewPerson, onVerify}:Props) {
+export function PredictionBaseMenu({ disableButtons, onVerify}:Props) {
     const state = usePredictionStateContext()
     const predicitonFunctionality = usePredictionFunctionalityContext()
 
 
     return (
         <div>
-            <div>
-                <button
-                    type="button"
-                    disabled={disableButtons || state.state==="processing"}
-                    onClick={onAddNewPerson}
-                    className={`${styles.button} ${styles.primary}`}
-                >
-                    Add new people or images
-                </button>
-            </div>
+
 
             <div>
                 <button

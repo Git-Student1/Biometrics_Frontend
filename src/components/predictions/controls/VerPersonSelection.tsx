@@ -1,6 +1,6 @@
 import {type ButtonProp, PersonSelection} from "../../commons/PersonSelection.tsx";
 import {fetchPeopleQualifyingForVerification} from "../../../api/people.ts";
-import {VerIdentImageCount} from "../visualisation/VerIdentImageCount.tsx";
+import {ReferenceImagesCount} from "../visualisation/ReferenceImagesCount.tsx";
 import {useState} from "react";
 import {usePredictionFunctionalityContext} from "../../../hooks/ContextHooks.ts";
 
@@ -39,7 +39,7 @@ export function VerPersonSelection({ onStartVerify, onClose}:Props) {
             </div>
             <div>
                 {selectedPerson!=="" && (
-                    <VerIdentImageCount recordingPerson={selectedPerson}/>
+                    <ReferenceImagesCount recordingPerson={selectedPerson}/>
                 )}
             </div>
         </>

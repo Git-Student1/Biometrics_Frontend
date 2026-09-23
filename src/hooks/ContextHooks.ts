@@ -2,7 +2,7 @@ import {useContext} from "react";
 import {
     PredictionFunctionalityContext,
     PredictionStateContext
-} from "../components/predictions/VerIdent.tsx";
+} from "../components/predictions/PredictionComponent.tsx";
 
 export function usePredictionStateContext() {
     const context = useContext(PredictionStateContext);

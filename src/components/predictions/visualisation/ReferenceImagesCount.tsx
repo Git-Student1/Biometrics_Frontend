@@ -10,7 +10,7 @@ export type Props = {
 
 }
 
-export function VerIdentImageCount({recordingPerson}: Props) {
+export function ReferenceImagesCount({recordingPerson}: Props) {
     const [imgNumber, setImgNumber] = useState<number>(0);
 
 

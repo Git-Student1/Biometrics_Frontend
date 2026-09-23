@@ -1,8 +1,8 @@
 import {useLayoutEffect, useRef, useState} from "react";
-import styles from "../Styles/Styles.module.css";
-import {PosImageRecording} from "../components/trainingImgRecording/PosImageRecording.tsx";
-import {ModelTraining} from "../components/model/ModelTraining.tsx";
-import ModelList from "../components/model/ModelsList.tsx";
+import styles from "../../Styles/Styles.module.css";
+import {PosImageRecording} from "../../components/trainingImgRecording/PosImageRecording.tsx";
+import {ModelTraining} from "../../components/modelAcquisition/ModelTraining.tsx";
+import ModelList from "../../components/modelAcquisition/ModelsList.tsx";
 
 type Props = {
     setLoadedModel: (model:string)=>void

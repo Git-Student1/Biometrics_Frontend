@@ -1,8 +1,8 @@
 import { useState } from "react";
 import styles from "../../../Styles/Styles.module.css";
-import {VerIdentImageRecordingControls} from "./VerIdentImageRecoringControls.tsx";
+import {VerIdentImageRecordingControls} from "./PredictionImageRecoringControls.tsx";
 
-import {VerIdentBaseMenu} from "./VerIdentBaseMenu.tsx";
+import {PredictionBaseMenu} from "./PredictionBaseMenu.tsx";
 import {VerPersonSelection} from "./VerPersonSelection.tsx";
 import {
     usePredictionFunctionalityContext,
@@ -16,7 +16,7 @@ type PredictionMenuState =
     "recording" |
     "addPerson"
 
-export function VerIdentControls() {
+export function PredictionControls() {
     const [predictionMenuState, setPredictionMenuState] = useState<PredictionMenuState>("baseMenu")
     const predicitonFunctionality = usePredictionFunctionalityContext()
 
@@ -38,9 +38,8 @@ export function VerIdentControls() {
                 <div>
                     {( predictionMenuState === "baseMenu"
                     || predictionMenuState === "baseMenu-VerPersonSelection") && (
-                        <VerIdentBaseMenu
+                        <PredictionBaseMenu
                             onVerify={showVerificationSelection}
-                            onAddNewPerson={showAddNewPeopleDialog}
                             disableButtons={predictionMenuState!=="baseMenu"}
                         />
                     )}
@@ -54,18 +53,6 @@ export function VerIdentControls() {
                         />
                     )}
 
-                    {predictionMenuState ==="recording" && (
-                        <div>
-                            <VerIdentImageRecordingControls/>
-                            <button
-                                type="button"
-                                className={`${styles.button} ${styles.secondary}`}
-                                onClick={()=> setPredictionMenuState("baseMenu")}
-                            >
-                                Close
-                            </button>
-                        </div>
-                    )}
 
                 </div>
         </>)

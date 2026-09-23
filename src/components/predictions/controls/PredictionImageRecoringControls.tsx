@@ -7,7 +7,7 @@ import {startRecordingVerIdent} from "../../../api/camera.ts";
 
 import {addVerIdentPerson, fetchAllVerIdentPeople} from "../../../api/people.ts";
 
-import {VerIdentImageCount} from "../visualisation/VerIdentImageCount.tsx";
+import {ReferenceImagesCount} from "../visualisation/ReferenceImagesCount.tsx";
 
 export function VerIdentImageRecordingControls() {
 
@@ -35,7 +35,7 @@ export function VerIdentImageRecordingControls() {
                 selectButtonBeforeSelection={false}
             />
 
-            { recordingPerson &&( <VerIdentImageCount recordingPerson={recordingPerson}/> )}
+            { recordingPerson &&( <ReferenceImagesCount recordingPerson={recordingPerson}/> )}
 
         </>
     );
