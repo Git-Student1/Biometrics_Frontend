@@ -1,25 +1,43 @@
+*{
+    box-sizing: border-box;
+}
+
 .step {
+    font-weight: normal;
+    display: inline;
     color:grey;
     padding: 2px;
+    border-radius: 3px;
+    margin: 10px;
+
     &.selected{
         color:white;
-        border: 1px, dotted ,green;
+        border: 1px solid green;
+        box-shadow: 2px 2px  green;
     }
     &.completed{
-        color:white;
+        color:grey;
+        text-decoration:  line-through;
+        cursor: pointer;
     }
 }
 
 .stepper {
     display: flex;
     align-items: center;
-
+    justify-content: flex-start;
+    font-size: 20px;
+    font-weight: bold;
     list-style: none;
+    padding: 0;
+    margin: 0 0 80px;
 
     & li:not(:last-child)::after {
+        font-weight: normal;
         content: "→";
         color:white;
-        margin: 0 10px;
+        margin: 0 0px;
+
     }
 
 }

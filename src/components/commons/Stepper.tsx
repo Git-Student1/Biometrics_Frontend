@@ -13,11 +13,15 @@ type StepperProps = {
 
 export function Stepper({steps, currentStep}: StepperProps) {
     return (<ol className={styles.stepper}>
+        Face Recognition:
         {steps.map((step, index) => {
             return (
-                <li
-                    className={`${styles.step} ${currentStep === index? styles.selected : ''} ${currentStep > index? styles.completed : ''}`}
-                >{index+1}: {step.label}</li>)
+                <li>
+                    <span className={`${styles.step} ${currentStep === index? styles.selected : ''} ${currentStep > index? styles.completed : ''}`}
+                    >
+                        {index+1}: {step.label}
+                    </span>
+                </li>)
         })}
     </ol>)
 

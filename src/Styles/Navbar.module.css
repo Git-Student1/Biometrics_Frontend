@@ -5,11 +5,12 @@
     gap: 16px;
     width: 100%;
     background: #141414;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
     padding-right:  20px;
     box-sizing: border-box;
     border-radius: 0  0 20px  5px;
     box-shadow: 3px 7px 10px 3px rgba(200,200,200,0.2);
+    border: 1px solid black
 }
 .navbarItem {
     color:  white;
